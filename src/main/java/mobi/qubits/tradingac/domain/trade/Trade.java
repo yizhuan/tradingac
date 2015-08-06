@@ -20,38 +20,42 @@ public class Trade extends AbstractAnnotatedAggregateRoot<String>{
 	private static final long serialVersionUID = -8636138534455558578L;
 
 	@AggregateIdentifier
-	private String id;	
+	private String id;
 	
-	private Short type; //0: sell; 1: buy
+	private String symbol;
+	private Long shares = 0L;
 		
 	Trade(){
 		
 	}
 	
 	@CommandHandler
-	public Trade(BuyCommand cmd) {
-		//make domain changes here
+	public Trade(BuyCommand cmd) {	
 		apply(new BuyEvent(cmd.getId(), cmd.getSymbol(), cmd.getShares(), cmd.getPrice()));
 	}
 	
 	@CommandHandler
 	void on(SellCommand cmd) {
-		//make domain changes here
-		apply(new SellEvent(cmd.getId(), cmd.getSymbol(), cmd.getShares(), cmd.getPrice()));
+		//if (this.shares >= cmd.getShares()){
+			apply(new SellEvent(id, cmd.getSymbol(), cmd.getShares(), cmd.getPrice()));
+		//}
 	}
-		
+
+	//called immediately when events are applied to the local aggregate
+	@EventSourcingHandler
+	void on(BuyEvent event) {
+		this.id = event.getId();		
+		this.symbol = event.getSymbol();
+		this.shares = this.shares + event.getShares();
+	}
+	
+	
 	//called immediately when events are applied to the local aggregate
 	@EventSourcingHandler
 	void on(SellEvent event) {
-		this.id = event.getId();	
-		this.type = 0;
+		this.shares = this.shares - event.getShares();
 	}
 	
-	@EventSourcingHandler
-	void on(BuyEvent event) {
-		this.id = event.getId();
-		this.type = 1;
-	}
 
 	
 }

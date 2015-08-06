@@ -34,6 +34,7 @@ public class AxonConfiguration {
 	
 	
 	@Autowired private ApplicationContext applicationContext;
+	@Autowired Mongo mongo;
 
 	@Bean
 	public AnnotationEventListenerBeanPostProcessor annotationEventListenerBeanPostProcessor() {
@@ -71,10 +72,8 @@ public class AxonConfiguration {
 	
 	@Bean
 	public EventSourcingRepository<Trade> tradeRepository() {
-		
-		Mongo mongo = applicationContext.getBean(Mongo.class);
-				
-		DefaultMongoTemplate template = new DefaultMongoTemplate(mongo);
+
+		DefaultMongoTemplate template = new DefaultMongoTemplate(this.mongo);
 		MongoEventStore eventStore = new MongoEventStore(template
 				);
 		EventSourcingRepository<Trade> repository = new EventSourcingRepository<Trade>(

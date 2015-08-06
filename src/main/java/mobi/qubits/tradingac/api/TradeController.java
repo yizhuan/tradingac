@@ -16,7 +16,9 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.DefaultIdentifierFactory;
 import org.axonframework.domain.IdentifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 
@@ -44,30 +48,41 @@ public class TradeController {
 
 	@Autowired
 	private CommandGateway cmdGateway;
+	
+	@RequestMapping(value = "/api/trades/buy", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public ResponseEntity<?> buy(@RequestBody @Valid TradingRequest request, UriComponentsBuilder b) {
+		String id = identifierFactory.generateIdentifier();
+		cmdGateway.send(new BuyCommand(id, request.getSymbol(), request
+				.getShares(), request.getPrice()));
 
-	@RequestMapping(value = "/api/trades/{type}", method = RequestMethod.GET)
+		UriComponents uriComponents = b.path("/api/trades/{id}").buildAndExpand(
+				id);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriComponents.toUri());
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/api/trades/{id}/sell", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void sell(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
+			cmdGateway.send(new SellCommand(id, request.getSymbol(), request
+					.getShares(), request.getPrice()));
+	}	
+	
+	
+	@RequestMapping(value = "/api/trades/{id}", method = RequestMethod.GET)
+	public TradeEntry findlTrade(@PathVariable String id) {
+		return tradeEntryRepository.findOne(id);
+	}
+	
+	@RequestMapping(value = "/api/trades/types/{type}", method = RequestMethod.GET)
 	public @ResponseBody List<TradeEntry> findlAll(@PathVariable short type) {
 		return tradeEntryRepository.findByType(type);
 	}
-
-	@RequestMapping(value = "/api/trades", method = RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void createTrade(@RequestBody @Valid TradingRequest request) {
-		switch (request.getType()) {
-		case 0:// sell
-			cmdGateway.send(new SellCommand(identifierFactory
-					.generateIdentifier(), request.getSymbol(), request
-					.getShares(), request.getPrice()));
-			break;
-		case 1:// buy
-			cmdGateway.send(new BuyCommand(identifierFactory
-					.generateIdentifier(), request.getSymbol(), request
-					.getShares(), request.getPrice()));
-			break;
-		}
-
-	}
-
+	
+	
+	
 	@RequestMapping(value = "/api/tradingaccount/{symbol}", method = RequestMethod.GET)
 	public @ResponseBody TradingAccount find(@PathVariable String symbol) {
 		return tradingAccountRepository.findBySymbol(symbol);

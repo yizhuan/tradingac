@@ -23,24 +23,13 @@ public class TradingAccountListener {
 		TradingAccount acc = tradingAccountRepository.findBySymbol(event
 				.getSymbol());
 
-		if (acc == null) {
+		Long existingShares = acc.getShares();
+		Long newShares = event.getShares();
+		Long totalShares = existingShares - newShares;
 
-			// TODO
-			// No shares to sell
+		acc.setShares(totalShares);
 
-		} else {
-			Long existingShares = acc.getShares();
-			Long newShares = event.getShares();
-			Long totalShares = existingShares - newShares;
-
-			if (totalShares < 0) {
-				// TODO
-			}
-
-			acc.setShares(totalShares);
-
-			tradingAccountRepository.save(acc);
-		}
+		tradingAccountRepository.save(acc);
 
 	}
 
