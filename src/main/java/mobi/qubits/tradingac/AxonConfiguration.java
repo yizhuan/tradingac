@@ -2,7 +2,8 @@ package mobi.qubits.tradingac;
 
 import java.util.Arrays;
 
-import mobi.qubits.tradingac.domain.trade.Trade;
+import mobi.qubits.tradingac.domain.trade.Buying;
+import mobi.qubits.tradingac.domain.trade.Selling;
 
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
@@ -71,21 +72,41 @@ public class AxonConfiguration {
 	}
 	
 	@Bean
-	public EventSourcingRepository<Trade> tradeRepository() {
+	public EventSourcingRepository<Buying> buyingRepository() {
 
 		DefaultMongoTemplate template = new DefaultMongoTemplate(this.mongo);
 		MongoEventStore eventStore = new MongoEventStore(template
 				);
-		EventSourcingRepository<Trade> repository = new EventSourcingRepository<Trade>(
-				Trade.class, eventStore);
+		EventSourcingRepository<Buying> repository = new EventSourcingRepository<Buying>(
+				Buying.class, eventStore);
 		repository.setEventBus(eventBus());
 		return repository;
 	}	
 
 	@Bean
-	public AggregateAnnotationCommandHandler<Trade> tradeCommandHandler() {
-		AggregateAnnotationCommandHandler<Trade> commandHandler = AggregateAnnotationCommandHandler
-				.subscribe(Trade.class, tradeRepository(), commandBus());
+	public AggregateAnnotationCommandHandler<Buying> buyingCommandHandler() {
+		AggregateAnnotationCommandHandler<Buying> commandHandler = AggregateAnnotationCommandHandler
+				.subscribe(Buying.class, buyingRepository(), commandBus());
 		return commandHandler;
 	}
+	
+	
+	@Bean
+	public EventSourcingRepository<Selling> sellingRepository() {
+
+		DefaultMongoTemplate template = new DefaultMongoTemplate(this.mongo);
+		MongoEventStore eventStore = new MongoEventStore(template
+				);
+		EventSourcingRepository<Selling> repository = new EventSourcingRepository<Selling>(
+				Selling.class, eventStore);
+		repository.setEventBus(eventBus());
+		return repository;
+	}	
+
+	@Bean
+	public AggregateAnnotationCommandHandler<Selling> sellingCommandHandler() {
+		AggregateAnnotationCommandHandler<Selling> commandHandler = AggregateAnnotationCommandHandler
+				.subscribe(Selling.class, sellingRepository(), commandBus());
+		return commandHandler;
+	}	
 }

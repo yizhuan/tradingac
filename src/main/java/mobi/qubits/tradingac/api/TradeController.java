@@ -63,13 +63,19 @@ public class TradeController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "/api/trades/{id}/sell", method = RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void sell(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
+	@RequestMapping(value = "/api/trades/sell", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public ResponseEntity<?> sell(@RequestBody @Valid TradingRequest request, UriComponentsBuilder b) {
+			String id = identifierFactory.generateIdentifier();
 			cmdGateway.send(new SellCommand(id, request.getSymbol(), request
 					.getShares(), request.getPrice()));
-	}	
-	
+			
+			UriComponents uriComponents = b.path("/api/trades/{id}").buildAndExpand(
+					id);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(uriComponents.toUri());
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);			
+	}		
 	
 	@RequestMapping(value = "/api/trades/{id}", method = RequestMethod.GET)
 	public TradeEntry findlTrade(@PathVariable String id) {
@@ -81,6 +87,11 @@ public class TradeController {
 		return tradeEntryRepository.findByType(type);
 	}
 	
+	@RequestMapping(value = "/api/trades", method = RequestMethod.GET)
+	public @ResponseBody List<TradeEntry> findlAllTrades() {
+		return tradeEntryRepository.findAll();
+	}
+		
 	
 	
 	@RequestMapping(value = "/api/tradingaccount/{symbol}", method = RequestMethod.GET)

@@ -12,8 +12,6 @@ public class TradeEntry {
 	@Id
 	private String id;
 
-	private String eventId;
-
 	private String symbol;
 	private Long shares;
 	private Float price;
@@ -26,14 +24,6 @@ public class TradeEntry {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getEventId() {
-		return eventId;
-	}
-
-	public void setEventId(String eventId) {
-		this.eventId = eventId;
 	}
 
 	public String getSymbol() {
