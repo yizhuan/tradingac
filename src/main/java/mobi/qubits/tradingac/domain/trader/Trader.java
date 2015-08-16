@@ -1,4 +1,4 @@
-package mobi.qubits.tradingac.domain.trade;
+package mobi.qubits.tradingac.domain.trader;
 
 import mobi.qubits.tradingac.domain.commands.BuyCommand;
 import mobi.qubits.tradingac.domain.commands.RegisterNewTraderCommand;

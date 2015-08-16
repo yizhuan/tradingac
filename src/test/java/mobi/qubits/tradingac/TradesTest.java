@@ -47,7 +47,7 @@ public class TradesTest {
 		cmdGateway.send(new RegisterNewTraderCommand(id, traderReq.getName()));
 	}
 	
-	@Test
+	//@Test
 	public void testBuying() throws InterruptedException{
 		
 		TradingRequest req = new TradingRequest("FB", 100L, 92.5F, (short)1);
@@ -66,7 +66,7 @@ public class TradesTest {
 		*/
 	}
 	
-	@Test
+	//@Test
 	public void testSelling() throws InterruptedException{
 		
 		TradingRequest req = new TradingRequest("FB", 100L, 92.5F, (short)0);
@@ -84,29 +84,32 @@ public class TradesTest {
 		assertTrue(selling.getType().equals(req.getType()));
 		*/
 	}	
-	
+		
 	
 	@Test
-	public void testBuyingAndSelling() throws InterruptedException{
+	public void testBuyAndSell() throws InterruptedException{
+	
+		String symbol = "600036";
+		Float price = 17.8f;
 		
-		
-		TradingBalance ac = tradingAccountEntryRepository.findByTraderIdAndSymbol(id, "FB");
+	
+		TradingBalance ac = tradingAccountEntryRepository.findByTraderIdAndSymbol(id, symbol);
 		Long shares = ac==null? 0L: ac.getShares();
 		
 		
-		TradingRequest breq = new TradingRequest("FB", 100L, 92.5F, (short)1);
+		TradingRequest breq = new TradingRequest(symbol, 100L, price, (short)1);
 		
 		cmdGateway.send(new BuyCommand(id, breq.getSymbol(), breq
 				.getShares(), breq.getPrice()));		
 				
-		TradingRequest sreq = new TradingRequest("FB", 100L, 92.5F, (short)0);
+		TradingRequest sreq = new TradingRequest(symbol, 100L, price, (short)0);
 		
 		cmdGateway.send(new SellCommand(id, sreq.getSymbol(), sreq
 				.getShares(), sreq.getPrice()));
 		
 		Thread.sleep(1000);
 					
-		TradingBalance ac1 = tradingAccountEntryRepository.findByTraderIdAndSymbol(id, "FB");
+		TradingBalance ac1 = tradingAccountEntryRepository.findByTraderIdAndSymbol(id, symbol);
 		assertTrue(ac1.getShares().equals(shares) );
 		
 	}		

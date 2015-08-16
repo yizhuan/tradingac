@@ -1,9 +1,11 @@
-package mobi.qubits.tradingac.sina;
+package mobi.qubits.tradingac.quote.sina;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import mobi.qubits.tradingac.quote.QuoteService;
 
 /**
  * Get a quote from Sina web service.
@@ -11,9 +13,10 @@ import javax.ws.rs.core.Response;
  * @author yizhuan
  *
  */
-public class SinaQuoteRealtime {
+public class SinaQuoteService implements QuoteService{
 
 	public SinaQuote getQuote(String symbol){
+		
 		Client client = ClientBuilder.newClient();
 
 		String url = "http://hq.sinajs.cn/list="+ SinaSymbolUtil.toSinaSymbol(symbol);
@@ -22,7 +25,12 @@ public class SinaQuoteRealtime {
 		
 		String response = res.readEntity(String.class);
 		
-		return parse(symbol, response);
+		if (response.contains("FAILED")){
+			return null;
+		}
+		else{
+			return parse(symbol, response);
+		}
 	}
 
 	private SinaQuote parse(String symbol, String q) {
@@ -38,7 +46,7 @@ public class SinaQuoteRealtime {
 		sq.setSymbol(symbol);		
 		sq.setName(values[0]);
 		sq.setOpen(strToFloat(values[1]));
-		sq.setLastClose(strToFloat(values[2]));
+		sq.setPrevClose(strToFloat(values[2]));
 		sq.setCurrentQuote(strToFloat(values[3]));
 		sq.setHigh(strToFloat(values[4]));
 		sq.setLow(strToFloat(values[5]));

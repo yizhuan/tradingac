@@ -1,4 +1,4 @@
-package mobi.qubits.tradingac.sina;
+package mobi.qubits.tradingac.quote;
 
 /**
  * A real-time quote value object.
@@ -6,13 +6,13 @@ package mobi.qubits.tradingac.sina;
  * @author yizhuan
  *
  */
-public class SinaQuote {
+public class Quote {
 
 	private String symbol;
 	
 	private String name;
 	private float open;
-	private float lastClose;
+	private float prevClose;
 	private float currentQuote;
 	private float high;
 	private float low;
@@ -20,7 +20,7 @@ public class SinaQuote {
 	private String date;
 	private String timestamp;	
 	
-	public SinaQuote() {
+	public Quote() {
 		super();
 	}
 	
@@ -42,11 +42,11 @@ public class SinaQuote {
 	public void setOpen(float open) {
 		this.open = open;
 	}
-	public float getLastClose() {
-		return lastClose;
+	public float getPrevClose() {
+		return prevClose;
 	}
-	public void setLastClose(float lastClose) {
-		this.lastClose = lastClose;
+	public void setPrevClose(float lastClose) {
+		this.prevClose = lastClose;
 	}
 	public float getCurrentQuote() {
 		return currentQuote;

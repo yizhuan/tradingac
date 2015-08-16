@@ -1,8 +1,8 @@
 package mobi.qubits.tradingac;
 
 import static org.junit.Assert.*;
-import mobi.qubits.tradingac.sina.SinaQuote;
-import mobi.qubits.tradingac.sina.SinaQuoteRealtime;
+import mobi.qubits.tradingac.quote.sina.SinaQuote;
+import mobi.qubits.tradingac.quote.sina.SinaQuoteService;
 
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ public class SinaQuoteTest {
 	
 	@Test
 	public void testQuote(){
-		SinaQuoteRealtime s = new SinaQuoteRealtime();
+		SinaQuoteService s = new SinaQuoteService();
 		
 		SinaQuote q = s.getQuote("600036");
 		

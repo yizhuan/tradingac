@@ -2,7 +2,7 @@ package mobi.qubits.tradingac;
 
 import java.util.Arrays;
 
-import mobi.qubits.tradingac.domain.trade.Trader;
+import mobi.qubits.tradingac.domain.trader.Trader;
 
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;

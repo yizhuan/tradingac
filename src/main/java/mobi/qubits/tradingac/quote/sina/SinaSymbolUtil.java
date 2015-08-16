@@ -1,4 +1,4 @@
-package mobi.qubits.tradingac.sina;
+package mobi.qubits.tradingac.quote.sina;
 
 /**
  * 
