@@ -2,6 +2,11 @@ package mobi.qubits.tradingac.query.trade;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class TraderEntry {
 
 	@Id

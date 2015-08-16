@@ -6,6 +6,11 @@ import mobi.qubits.tradingac.quote.sina.SinaQuoteService;
 
 import org.junit.Test;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class SinaQuoteTest {
 
 	

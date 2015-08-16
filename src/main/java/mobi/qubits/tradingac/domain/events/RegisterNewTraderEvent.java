@@ -1,5 +1,10 @@
 package mobi.qubits.tradingac.domain.events;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class RegisterNewTraderEvent {
 
 private String id;

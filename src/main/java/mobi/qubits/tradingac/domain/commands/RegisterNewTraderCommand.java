@@ -2,6 +2,11 @@ package mobi.qubits.tradingac.domain.commands;
 
 import org.axonframework.commandhandling.annotation.TargetAggregateIdentifier;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class RegisterNewTraderCommand {
 
 	@TargetAggregateIdentifier

@@ -1,5 +1,10 @@
 package mobi.qubits.tradingac.query.trade;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class RealtimeBalance extends TradingBalance{
 		
 	private Float lastClose;

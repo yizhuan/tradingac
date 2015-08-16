@@ -12,6 +12,11 @@ import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot
 import org.axonframework.eventsourcing.annotation.AggregateIdentifier;
 import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class Trader extends AbstractAnnotatedAggregateRoot<String>{
 
 	@AggregateIdentifier

@@ -8,6 +8,11 @@ import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 @Component
 public class TraderListener {
 

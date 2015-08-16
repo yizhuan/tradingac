@@ -6,6 +6,11 @@ import mobi.qubits.tradingac.quote.google.GoogleQuoteService;
 
 import org.junit.Test;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class GoogleQuoteTest {
 
 	

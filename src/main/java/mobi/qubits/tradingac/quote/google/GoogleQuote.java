@@ -2,6 +2,11 @@ package mobi.qubits.tradingac.quote.google;
 
 import mobi.qubits.tradingac.quote.Quote;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class GoogleQuote extends Quote{
 	
 	

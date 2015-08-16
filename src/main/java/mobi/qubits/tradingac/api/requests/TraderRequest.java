@@ -1,5 +1,10 @@
 package mobi.qubits.tradingac.api.requests;
 
+/**
+ * 
+ * @author yizhuan
+ *
+ */
 public class TraderRequest {
 
 	private String name;
