@@ -2,8 +2,7 @@ package mobi.qubits.tradingac;
 
 import java.util.Arrays;
 
-import mobi.qubits.tradingac.domain.trade.Buying;
-import mobi.qubits.tradingac.domain.trade.Selling;
+import mobi.qubits.tradingac.domain.trade.Trader;
 
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
@@ -72,41 +71,23 @@ public class AxonConfiguration {
 	}
 	
 	@Bean
-	public EventSourcingRepository<Buying> buyingRepository() {
+	public EventSourcingRepository<Trader> traderRepository() {
 
 		DefaultMongoTemplate template = new DefaultMongoTemplate(this.mongo);
 		MongoEventStore eventStore = new MongoEventStore(template
 				);
-		EventSourcingRepository<Buying> repository = new EventSourcingRepository<Buying>(
-				Buying.class, eventStore);
+		EventSourcingRepository<Trader> repository = new EventSourcingRepository<Trader>(
+				Trader.class, eventStore);
 		repository.setEventBus(eventBus());
 		return repository;
 	}	
 
 	@Bean
-	public AggregateAnnotationCommandHandler<Buying> buyingCommandHandler() {
-		AggregateAnnotationCommandHandler<Buying> commandHandler = AggregateAnnotationCommandHandler
-				.subscribe(Buying.class, buyingRepository(), commandBus());
+	public AggregateAnnotationCommandHandler<Trader> TraderCommandHandler() {
+		AggregateAnnotationCommandHandler<Trader> commandHandler = AggregateAnnotationCommandHandler
+				.subscribe(Trader.class, traderRepository(), commandBus());
 		return commandHandler;
 	}
 	
-	
-	@Bean
-	public EventSourcingRepository<Selling> sellingRepository() {
 
-		DefaultMongoTemplate template = new DefaultMongoTemplate(this.mongo);
-		MongoEventStore eventStore = new MongoEventStore(template
-				);
-		EventSourcingRepository<Selling> repository = new EventSourcingRepository<Selling>(
-				Selling.class, eventStore);
-		repository.setEventBus(eventBus());
-		return repository;
-	}	
-
-	@Bean
-	public AggregateAnnotationCommandHandler<Selling> sellingCommandHandler() {
-		AggregateAnnotationCommandHandler<Selling> commandHandler = AggregateAnnotationCommandHandler
-				.subscribe(Selling.class, sellingRepository(), commandBus());
-		return commandHandler;
-	}	
 }

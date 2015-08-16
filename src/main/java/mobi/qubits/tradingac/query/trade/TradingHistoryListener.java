@@ -21,7 +21,7 @@ public class TradingHistoryListener {
 	@EventHandler
 	void on(SellEvent event) {
 		TradeEntry entry = new TradeEntry();
-		entry.setId(event.getId());
+		entry.setTraderId(event.getId());
 		entry.setSymbol(event.getSymbol());
 		entry.setShares(event.getShares());
 		entry.setPrice(event.getPrice());
@@ -34,7 +34,7 @@ public class TradingHistoryListener {
 	void on(BuyEvent event) {
 
 		TradeEntry entry = new TradeEntry();
-		entry.setId(event.getId());
+		entry.setTraderId(event.getId());
 		entry.setSymbol(event.getSymbol());
 		entry.setShares(event.getShares());
 		entry.setPrice(event.getPrice());

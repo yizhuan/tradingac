@@ -7,23 +7,26 @@ import org.springframework.data.annotation.Id;
  * @author yizhuan
  *
  */
-public class TradingAccount {
+public class TradingBalance {
 
 	@Id
 	private String id;
 
+	private String traderId;
+	
 	private String symbol;
 	private Long shares;
 	private Float costPerShare;
 
-	public TradingAccount() {
+	public TradingBalance() {
 
 	}
 
-	public TradingAccount(String id, String symbol, Long shares,
+	public TradingBalance(String id, String traderId, String symbol, Long shares,
 			Float buyingPrice) {
 		super();
 		this.id = id;
+		this.traderId = traderId;
 		this.symbol = symbol;
 		this.shares = shares;
 		this.costPerShare = buyingPrice;
@@ -37,6 +40,14 @@ public class TradingAccount {
 		this.id = id;
 	}
 
+	public String getTraderId() {
+		return traderId;
+	}
+
+	public void setTraderId(String traderId) {
+		this.traderId = traderId;
+	}
+	
 	public String getSymbol() {
 		return symbol;
 	}

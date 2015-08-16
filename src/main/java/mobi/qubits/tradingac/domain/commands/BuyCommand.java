@@ -11,6 +11,7 @@ public class BuyCommand {
 
 	@TargetAggregateIdentifier
 	private String id;
+
 	private String symbol;	
 	private Long shares;
 	private Float price;
@@ -29,6 +30,7 @@ public class BuyCommand {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public String getSymbol() {
 		return symbol;
 	}

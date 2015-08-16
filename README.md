@@ -15,18 +15,36 @@ $ mvn package
 
 # Start service
 
-java -jar target/tradingac-0.1.0.jar
+java -jar target/tradingac-0.2.0.jar
 
 
-# Use REST services
+# RESTful services
 
+## Traders
+curl -X POST -d '{"name":"John Smith"}' -H "Content-Type:application/json" http://localhost:8080/api/traders
 
-$ curl http://localhost:8080/users
+curl http://localhost:8080/api/traders
 
-$ curl -X POST -d '{"firstName":"Pat", "lastName":"Rabbit"}' -H "Content-Type:application/json" http://localhost:8080/users 
-$ curl -X POST -d '{"firstName":"Jim", "lastName":"Roggers"}' -H "Content-Type:application/json" http://localhost:8080/users
+curl http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3
 
-(TODO: User management and access control) 
+## Trades
+
+curl -X POST -d '{"symbol":"GOOG", "shares": 100,"price":560.9, "type": 1}' -H "Content-Type:application/json" http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/buy
+
+curl -X POST -d '{"symbol":"GOOG", "shares": 100,"price":560.9, "type": 0}' -H "Content-Type:application/json" http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/sell
+
+curl http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/trades
+
+### Trades e.g. Facebook
+curl http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/trades/FB
+
+curl http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/trades/FB/1
+
+## Balance
+curl http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/balance
+
+### Balance e.g. Facebook
+curl http://localhost:8080/api/traders/87b5dc8e-b95a-42d8-93d7-eeb7773195a3/balance/FB
 
 # Check MongoDB
 
@@ -52,9 +70,6 @@ domainevents
 system.indexes
 
 > db.domainevents.find()
-{ "_id" : ObjectId("55bfbada1543ad1ee2cd3caa"), "aggregateIdentifier" : "0a002ec3-ffcb-4362-adce-c0b881688f66", "sequenceNumber" : NumberLong(0), "serializedPayload" : "<mobi.qubits.tradingac.domain.events.BuyEvent><id>0a002ec3-ffcb-4362-adce-c0b881688f66</id><symbol>FB</symbol><shares>20</shares><price>93.6</price></mobi.qubits.tradingac.domain.events.BuyEvent>", "timeStamp" : "2015-08-03T20:02:49.946+01:00", "type" : "Trade", "payloadType" : "mobi.qubits.tradingac.domain.events.BuyEvent", "payloadRevision" : null, "serializedMetaData" : "<meta-data/>", "eventIdentifier" : "4dd4fba8-2848-4324-8693-cb5c67610a48" }
->
-
 
 >use test
 
@@ -63,14 +78,7 @@ system.indexes
 tradeEntry
 
 > db.tradeEntry.find()
-{ "_id" : ObjectId("55bfc06f15437e7e64b136d7"), "_class" : "mobi.qubits.tradingac.query.trade.TradeEntry", "eventId" : "072eaed3-5db9-496c-8db2-aac1e1ee2dda", "symbol" : "FB", "shares" : NumberLong(15), "price" : 93.5999984741211, "type" : 1 }
->
 
-List all holdings
-$ curl http://localhost:8080/api/tradingaccount
-
-Find Facebook
-$ curl http://localhost:8080/api/tradingaccount/FB
 
 
 # TODO

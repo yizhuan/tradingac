@@ -4,13 +4,17 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import mobi.qubits.tradingac.api.requests.TraderRequest;
 import mobi.qubits.tradingac.api.requests.TradingRequest;
 import mobi.qubits.tradingac.domain.commands.BuyCommand;
+import mobi.qubits.tradingac.domain.commands.RegisterNewTraderCommand;
 import mobi.qubits.tradingac.domain.commands.SellCommand;
 import mobi.qubits.tradingac.query.trade.TradeEntry;
 import mobi.qubits.tradingac.query.trade.TradeEntryRepository;
-import mobi.qubits.tradingac.query.trade.TradingAccount;
-import mobi.qubits.tradingac.query.trade.TradingAccountRepository;
+import mobi.qubits.tradingac.query.trade.TraderEntry;
+import mobi.qubits.tradingac.query.trade.TraderEntryRepository;
+import mobi.qubits.tradingac.query.trade.TradingBalance;
+import mobi.qubits.tradingac.query.trade.TradingBalanceRepository;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.DefaultIdentifierFactory;
@@ -40,68 +44,82 @@ public class TradeController {
 	private final IdentifierFactory identifierFactory = new DefaultIdentifierFactory();
 
 	@Autowired
+	private TraderEntryRepository traderEntryRepository;
+	
+	@Autowired
 	private TradeEntryRepository tradeEntryRepository;
 
+
 	@Autowired
-	private TradingAccountRepository tradingAccountRepository;
+	private TradingBalanceRepository tradingBalanceRepository;
 
 
 	@Autowired
 	private CommandGateway cmdGateway;
 	
-	@RequestMapping(value = "/api/trades/buy", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/traders/", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public ResponseEntity<?> buy(@RequestBody @Valid TradingRequest request, UriComponentsBuilder b) {
+	public ResponseEntity<?> createTrader(@RequestBody @Valid TraderRequest request, UriComponentsBuilder b) {
 		String id = identifierFactory.generateIdentifier();
-		cmdGateway.send(new BuyCommand(id, request.getSymbol(), request
-				.getShares(), request.getPrice()));
+		cmdGateway.send(new RegisterNewTraderCommand(id, request.getName()));
 
-		UriComponents uriComponents = b.path("/api/trades/{id}").buildAndExpand(
+		UriComponents uriComponents = b.path("/api/traders/{id}").buildAndExpand(
 				id);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uriComponents.toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}	
+	
+	@RequestMapping(value = "/api/traders/{id}/buy", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.ACCEPTED)
+	public void buy(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
+		cmdGateway.send(new BuyCommand(id, request.getSymbol(), request
+				.getShares(), request.getPrice()));
 	}
 	
-	@RequestMapping(value = "/api/trades/sell", method = RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public ResponseEntity<?> sell(@RequestBody @Valid TradingRequest request, UriComponentsBuilder b) {
-			String id = identifierFactory.generateIdentifier();
+	@RequestMapping(value = "/api/traders/{id}/sell", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.ACCEPTED)
+	public void sell(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
 			cmdGateway.send(new SellCommand(id, request.getSymbol(), request
 					.getShares(), request.getPrice()));
-			
-			UriComponents uriComponents = b.path("/api/trades/{id}").buildAndExpand(
-					id);
-			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(uriComponents.toUri());
-			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);			
 	}		
 	
-	@RequestMapping(value = "/api/trades/{id}", method = RequestMethod.GET)
-	public TradeEntry findlTrade(@PathVariable String id) {
-		return tradeEntryRepository.findOne(id);
+	@RequestMapping(value = "/api/traders/{id}", method = RequestMethod.GET)
+	public TraderEntry findlTrade(@PathVariable String id) {
+		return traderEntryRepository.findOne(id);
 	}
 	
-	@RequestMapping(value = "/api/trades/types/{type}", method = RequestMethod.GET)
-	public @ResponseBody List<TradeEntry> findlAll(@PathVariable short type) {
-		return tradeEntryRepository.findByType(type);
+	@RequestMapping(value = "/api/traders", method = RequestMethod.GET)
+	public @ResponseBody List<TraderEntry> findlAllTraders() {
+		return traderEntryRepository.findAll();
 	}
 	
-	@RequestMapping(value = "/api/trades", method = RequestMethod.GET)
-	public @ResponseBody List<TradeEntry> findlAllTrades() {
-		return tradeEntryRepository.findAll();
+	@RequestMapping(value = "/api/traders/{id}/trades", method = RequestMethod.GET)
+	public @ResponseBody List<TradeEntry> find( @PathVariable String id) {
+		return tradeEntryRepository.findByTraderId(id);
 	}
-		
 	
-	
-	@RequestMapping(value = "/api/tradingaccount/{symbol}", method = RequestMethod.GET)
-	public @ResponseBody TradingAccount find(@PathVariable String symbol) {
-		return tradingAccountRepository.findBySymbol(symbol);
+			
+	@RequestMapping(value = "/api/traders/{id}/trades/{symbol}", method = RequestMethod.GET)
+	public @ResponseBody List<TradeEntry> find( @PathVariable String id, @PathVariable String symbol) {
+		return tradeEntryRepository.findByTraderIdAndSymbol(id, symbol);
 	}
 
-	@RequestMapping(value = "/api/tradingaccount", method = RequestMethod.GET)
-	public @ResponseBody List<TradingAccount> findlAll() {
-		return tradingAccountRepository.findAll();
+	@RequestMapping(value = "/api/traders/{id}/trades/{symbol}/{type}", method = RequestMethod.GET)
+	public @ResponseBody List<TradeEntry> findlAll(@PathVariable String id, @PathVariable String symbol,  @PathVariable Short type) {
+		return tradeEntryRepository.findByTraderIdAndSymbolAndType(id, symbol, type);
 	}
+
+	
+	@RequestMapping(value = "/api/traders/{id}/balance", method = RequestMethod.GET)
+	public @ResponseBody List<TradingBalance> findBalance( @PathVariable String id) {
+		return tradingBalanceRepository.findByTraderId(id);
+	}	
+	
+	
+	@RequestMapping(value = "/api/traders/{id}/balance/{symbol}", method = RequestMethod.GET)
+	public @ResponseBody TradingBalance findBalance( @PathVariable String id, @PathVariable String symbol) {
+		return tradingBalanceRepository.findByTraderIdAndSymbol(id, symbol);
+	}	
 	
 }

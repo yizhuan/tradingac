@@ -11,6 +11,8 @@ public class TradeEntry {
 
 	@Id
 	private String id;
+	
+	private String traderId;
 
 	private String symbol;
 	private Long shares;
@@ -24,6 +26,14 @@ public class TradeEntry {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+		
+	public String getTraderId() {
+		return traderId;
+	}
+
+	public void setTraderId(String traderId) {
+		this.traderId = traderId;
 	}
 
 	public String getSymbol() {
