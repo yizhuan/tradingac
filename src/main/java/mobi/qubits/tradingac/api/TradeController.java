@@ -159,7 +159,6 @@ public class TradeController extends QuoteProvider{
 			for (TradeEntry e: entries){			
 				if (e.getSymbol().equals(b.getSymbol())){
 					results.add(e);
-					break;
 				}
 			}
 		}

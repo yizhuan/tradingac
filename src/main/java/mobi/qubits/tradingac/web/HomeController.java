@@ -1,5 +1,6 @@
 package mobi.qubits.tradingac.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mobi.qubits.tradingac.query.trade.RealtimeBalance;
@@ -35,8 +36,8 @@ public class HomeController extends QuoteProvider{
 	private TradingBalanceRepository tradingBalanceRepository;
 
 	 @RequestMapping("/index.html")
-	 public String home(@RequestParam(value="id", required=false, defaultValue="752fe7ef-b94a-45ab-880a-19097824a4a4") String id, Model model) {
-	 //public String home(@RequestParam(value="id", required=false, defaultValue="8bb53941-d9d3-40a6-9d42-cbf2755bf7db") String id, Model model) {
+	 //public String home(@RequestParam(value="id", required=false, defaultValue="752fe7ef-b94a-45ab-880a-19097824a4a4") String id, Model model) {
+	 public String home(@RequestParam(value="id", required=false, defaultValue="8bb53941-d9d3-40a6-9d42-cbf2755bf7db") String id, Model model) {
 
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
 		List<RealtimeBalance> balances = getRealtimeBalance(bals);
@@ -46,7 +47,23 @@ public class HomeController extends QuoteProvider{
 		 
 		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdAndType(
 				id, (short) 1);
-		List<RealtimeBalance> trades = getRealtimeTradeBalance(entries);
+		
+		List<TradeEntry> results = new ArrayList<TradeEntry>();	
+
+		//we will only list those with share balances.
+		
+		for (TradingBalance b: bals){
+			if(b.getShares()<1L){
+				continue;
+			}
+			for (TradeEntry e: entries){			
+				if (e.getSymbol().equals(b.getSymbol())){
+					results.add(e);
+				}
+			}
+		}
+		
+		List<RealtimeBalance> trades = getRealtimeTradeBalance(results);
 
 		model.addAttribute("trades", trades);
 
