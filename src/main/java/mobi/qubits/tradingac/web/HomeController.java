@@ -34,9 +34,9 @@ public class HomeController extends QuoteProvider{
 	@Autowired
 	private TradingBalanceRepository tradingBalanceRepository;
 
-	
 	 @RequestMapping("/index.html")
 	 public String home(@RequestParam(value="id", required=false, defaultValue="752fe7ef-b94a-45ab-880a-19097824a4a4") String id, Model model) {
+	 //public String home(@RequestParam(value="id", required=false, defaultValue="8bb53941-d9d3-40a6-9d42-cbf2755bf7db") String id, Model model) {
 
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
 		List<RealtimeBalance> balances = getRealtimeBalance(bals);

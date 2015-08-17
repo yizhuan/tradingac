@@ -56,7 +56,7 @@ public class QuoteProvider {
 		Float gainTodayPct = 100.0f*(quote.getCurrentQuote()- quote.getPrevClose())/quote.getPrevClose();
 		
 		Float gain = shares * (quote.getCurrentQuote() - tradingBalance.getCostPerShare());
-		Float gainPct = 100.0f*(quote.getCurrentQuote() - tradingBalance.getCostPerShare())/quote.getPrevClose();
+		Float gainPct = 100.0f*(quote.getCurrentQuote() - tradingBalance.getCostPerShare())/tradingBalance.getCostPerShare();
 		
 		bal.setGainToday(gainToday);
 		bal.setGainTodayPct(gainTodayPct);
@@ -107,7 +107,7 @@ public class QuoteProvider {
 		Float gainTodayPct = 100.0f*(quote.getCurrentQuote()- quote.getPrevClose())/quote.getPrevClose();
 		
 		Float gain = shares * (quote.getCurrentQuote() - entry.getPrice());
-		Float gainPct = 100.0f*(quote.getCurrentQuote() - entry.getPrice())/quote.getPrevClose();
+		Float gainPct = 100.0f*(quote.getCurrentQuote() - entry.getPrice())/entry.getPrice();
 		
 		bal.setGainToday(gainToday);
 		bal.setGainTodayPct(gainTodayPct);

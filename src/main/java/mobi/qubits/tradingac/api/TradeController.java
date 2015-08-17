@@ -59,7 +59,7 @@ public class TradeController extends QuoteProvider{
 	@Autowired
 	private CommandGateway cmdGateway;
 	
-	@RequestMapping(value = "/api/traders/", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/traders", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public ResponseEntity<?> createTrader(@RequestBody @Valid TraderRequest request, UriComponentsBuilder b) {
 		String id = identifierFactory.generateIdentifier();
