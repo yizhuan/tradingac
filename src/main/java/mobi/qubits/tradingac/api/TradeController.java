@@ -1,5 +1,6 @@
 package mobi.qubits.tradingac.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -143,8 +144,27 @@ public class TradeController extends QuoteProvider{
 	//realtime balance on historical trades (buying) showing historical gain/loss against current quote
 	@RequestMapping(value = "/api/traders/{id}/trades/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeTradeBalance( @PathVariable String id) {
+		
+		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);		
 		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdAndType(id, (short)1);
-		return getRealtimeTradeBalance(entries);
+		
+		List<TradeEntry> results = new ArrayList<TradeEntry>();	
+
+		//we will only list those with share balances.
+		
+		for (TradingBalance b: bals){
+			if(b.getShares()<1L){
+				continue;
+			}
+			for (TradeEntry e: entries){			
+				if (e.getSymbol().equals(b.getSymbol())){
+					results.add(e);
+					break;
+				}
+			}
+		}
+		
+		return getRealtimeTradeBalance(results);
 	}
 	
 	//realtime balance on historical trades (buying) showing historical gain/loss against current quote
