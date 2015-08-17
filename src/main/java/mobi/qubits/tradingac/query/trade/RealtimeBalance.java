@@ -7,7 +7,7 @@ package mobi.qubits.tradingac.query.trade;
  */
 public class RealtimeBalance extends TradingBalance{
 		
-	private Float lastClose;
+	private Float prevClose;
 	private Float currentQuote;
 	
 	private Float gainToday;
@@ -22,13 +22,13 @@ public class RealtimeBalance extends TradingBalance{
 	}
 
 
-	public Float getLastClose() {
-		return lastClose;
+	public Float getPrevClose() {
+		return prevClose;
 	}
 
 
-	public void setLastClose(Float lastClose) {
-		this.lastClose = lastClose;
+	public void setPrevClose(Float lastClose) {
+		this.prevClose = lastClose;
 	}
 
 

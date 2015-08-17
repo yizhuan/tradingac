@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Trading app</title>
+
+	<link href="css/main.css" rel="stylesheet"/>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+	<div class="container-fluid">		
+
+		<p>Account Overview</p>
+		
+		<div class="row">
+
+			<div class="col-md-1">
+
+				<div class="datagrid">
+				
+				<table>
+
+						<thead>
+
+							<tr>
+								<th>Symbol</th>
+								<th>Shares</th>
+								<th>Cost</th>
+								<th>Current</th>
+								<th>Prev</th>
+								<th>Gain</th>
+								<th>GainPct</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="b : ${balances}">
+								<td th:text="${b.symbol}">Symbol</td>
+								<td th:text="${b.shares}">Shares</td>
+								<td th:text="${b.costPerShare}">CostPerShare</td>								
+								<td th:text="${b.currentQuote}">CurrentQuote</td>
+								<td th:text="${b.prevClose}">Prev</td>
+								<td th:text="${b.gain}">Gain</td>
+								<td th:text="${b.gainPct}">GainPct</td>								
+							</tr>
+
+						</tbody>
+
+					</table>
+										
+				</div>
+
+
+			</div>
+			
+			<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
+			
+		</div>
+
+		
+		<p>Individual Transactions</p>
+
+		<div class="row">
+
+			<div class="col-md-1">
+
+				<div class="datagrid">
+				
+					<table>
+
+						<thead>
+
+							<tr>
+								<th>Symbol</th>
+								<th>Shares</th>
+								<th>Cost</th>
+								<th>Current</th>
+								<th>Prev</th>
+								<th>Gain</th>
+								<th>GainPct</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="trade : ${trades}">
+								<td th:text="${trade.symbol}">Symbol</td>
+								<td th:text="${trade.shares}">Shares</td>
+								<td th:text="${trade.costPerShare}">CostPerShare</td>
+								<td th:text="${trade.currentQuote}">CurrentQuote</td>
+								<td th:text="${trade.prevClose}">Prev</td>
+								<td th:text="${trade.gain}">Gain</td>
+								<td th:text="${trade.gainPct}">GainPct</td>								
+							</tr>
+
+						</tbody>
+
+					</table>
+				</div>
+
+
+			</div>
+			
+			<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
+			
+		</div>
+		
+		
+		
+		<!-- 
+		<div class="row">
+			<div class="col-md-8">.col-md-8</div>
+			<div class="col-md-4">.col-md-4</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">.col-md-4</div>
+			<div class="col-md-4">.col-md-4</div>
+			<div class="col-md-4">.col-md-4</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">.col-md-6</div>
+			<div class="col-md-6">.col-md-6</div>
+		</div>
+		 -->
+	</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
