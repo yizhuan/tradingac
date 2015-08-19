@@ -86,11 +86,11 @@ tradeEntry
 
 This version is just a rough sketch. Still lots to do:
 
-Add an interface to connect to real trading system
-Add tests, cover basic tests yet.
-Add Javadocs
-Add a web UI
-Fix TODOs
+- Add an interface to connect to real trading system
+- Add tests, cover basic tests yet.
+- Add Javadocs
+- Add a web UI
+- Fix TODOs
 
 
 
