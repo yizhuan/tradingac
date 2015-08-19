@@ -3,7 +3,9 @@ package mobi.qubits.tradingac.quote;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import mobi.qubits.tradingac.query.trade.RealtimeBalance;
 import mobi.qubits.tradingac.query.trade.TradeEntry;
@@ -13,14 +15,58 @@ import mobi.qubits.tradingac.quote.sina.SinaQuoteService;
 
 public class QuoteProvider {
 
-	public Quote getQuote(String symbol){
+	protected Map<String, Quote> quoteMap;
+	
+	protected void initQuoteMap(List<String> symbols){
+		this.quoteMap = createQuoteMap(symbols);
+	}
+	
+	protected void initQuoteMap(String symbol){
+		Quote q = getQuoteFromService(symbol);
+		this.quoteMap = new HashMap<String, Quote>();
+		this.quoteMap.put(symbol, q);
+	}
+	
+	protected Quote getQuote(String symbol){
+		return quoteMap.get(symbol);
+	}	
+	
+	protected List<String> findSymbols(List<TradingBalance> bals){
+		List<String> symbols = new ArrayList<String>();
+		for (TradingBalance b: bals){
+			String s = b.getSymbol();
+			if (!symbols.contains(s))
+				symbols.add(s);
+		}
+		return symbols;
+	}
+	
+	protected List<String> findSymbols2(List<TradeEntry> entries){
+		List<String> symbols = new ArrayList<String>();
+		for (TradeEntry b: entries){
+			String s = b.getSymbol();
+			if (!symbols.contains(s))
+				symbols.add(s);
+		}
+		return symbols;
+	}
+	
+	private Quote getQuoteFromService(String symbol){
 		QuoteService service = isNumeric(symbol)? new SinaQuoteService() :  new GoogleQuoteService();
 		Quote q = service.getQuote(symbol);	
 		return q;
 	}
 	
+	private Map<String, Quote> createQuoteMap(List<String> symbols){		
+		Map<String, Quote> map = new HashMap<String, Quote>();
+		for (String symbol: symbols){
+			Quote q = getQuoteFromService(symbol);
+			map.put(symbol,  q);			
+		}
+		return map;
+	}	
 	
-	public List<RealtimeBalance> getRealtimeBalance(List<TradingBalance> tradingBalances){
+	protected List<RealtimeBalance> getRealtimeBalance(List<TradingBalance> tradingBalances){
 		List<RealtimeBalance> bals = new ArrayList<RealtimeBalance>();
 		for (TradingBalance bal : tradingBalances){
 			RealtimeBalance rt = getRealtimeBalance(bal);
@@ -31,13 +77,13 @@ public class QuoteProvider {
 	}
 	
 
-	public RealtimeBalance getRealtimeBalance(TradingBalance tradingBalance){		
+	protected RealtimeBalance getRealtimeBalance(TradingBalance tradingBalance){		
 		Quote q = getQuote(tradingBalance.getSymbol());			
 		return q==null?null:getRealtimeBalance(q, tradingBalance);
 	}
 
 	
-	public RealtimeBalance getRealtimeBalance(Quote quote, TradingBalance tradingBalance){
+	protected RealtimeBalance getRealtimeBalance(Quote quote, TradingBalance tradingBalance){
 		
 		Long shares = tradingBalance.getShares();
 		
@@ -71,7 +117,7 @@ public class QuoteProvider {
 	
 	//balances on trade history (buying)	
 	
-	public List<RealtimeBalance> getRealtimeTradeBalance(List<TradeEntry> entries){
+	protected List<RealtimeBalance> getRealtimeTradeBalance(List<TradeEntry> entries){
 		List<RealtimeBalance> bals = new ArrayList<RealtimeBalance>();
 		for (TradeEntry bal : entries){
 			RealtimeBalance rt = getRealtimeTradeBalance(bal);
@@ -82,13 +128,13 @@ public class QuoteProvider {
 	}
 	
 
-	public RealtimeBalance getRealtimeTradeBalance(TradeEntry entry){
+	protected RealtimeBalance getRealtimeTradeBalance(TradeEntry entry){
 		String symbol = entry.getSymbol();
 		Quote q = getQuote(symbol);
 		return q==null?null:getRealtimeTradeBalance(q, entry);
 	}
 	
-	public RealtimeBalance getRealtimeTradeBalance(Quote quote, TradeEntry entry){
+	protected RealtimeBalance getRealtimeTradeBalance(Quote quote, TradeEntry entry){
 		
 		Long shares = entry.getShares();
 		
@@ -117,7 +163,7 @@ public class QuoteProvider {
 		return bal;
 	}	
 	
-	public boolean isNumeric(String str)
+	protected boolean isNumeric(String str)
 	{
 	  NumberFormat formatter = NumberFormat.getInstance();
 	  ParsePosition pos = new ParsePosition(0);

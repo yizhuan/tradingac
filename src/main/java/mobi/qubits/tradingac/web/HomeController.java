@@ -40,15 +40,16 @@ public class HomeController extends QuoteProvider{
 	 public String home(@RequestParam(value="id", required=false, defaultValue="8bb53941-d9d3-40a6-9d42-cbf2755bf7db") String id, Model model) {
 
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
+		
+		initQuoteMap(findSymbols(bals));
+		
 		List<RealtimeBalance> balances = getRealtimeBalance(bals);
 		
 		model.addAttribute("balances", balances);
-		 
-		 
-		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdAndType(
-				id, (short) 1);
+		 		 
+		List<TradeEntry> entries1 = tradeEntryRepository.findByTraderIdAndType(id, (short)1);
 		
-		List<TradeEntry> results = new ArrayList<TradeEntry>();	
+		List<TradeEntry> results1 = new ArrayList<TradeEntry>();	
 
 		//we will only list those with share balances.
 		
@@ -56,17 +57,40 @@ public class HomeController extends QuoteProvider{
 			if(b.getShares()<1L){
 				continue;
 			}
-			for (TradeEntry e: entries){			
+			for (TradeEntry e: entries1){			
 				if (e.getSymbol().equals(b.getSymbol())){
-					results.add(e);
+					results1.add(e);
 				}
 			}
 		}
 		
-		List<RealtimeBalance> trades = getRealtimeTradeBalance(results);
+		List<RealtimeBalance> tradesBuy = getRealtimeTradeBalance(results1);
 
-		model.addAttribute("trades", trades);
+		model.addAttribute("tradesBuy", tradesBuy);
+				
+		
+		List<TradeEntry> entries2 = tradeEntryRepository.findByTraderIdAndType(id, (short)0);
+		
+		List<TradeEntry> results2 = new ArrayList<TradeEntry>();	
 
+		//we will only list those with share balances.
+		
+		for (TradingBalance b: bals){
+			if(b.getShares()<1L){
+				continue;
+			}
+			for (TradeEntry e: entries2){			
+				if (e.getSymbol().equals(b.getSymbol())){
+					results2.add(e);
+				}
+			}
+		}
+		
+		List<RealtimeBalance> trades = getRealtimeTradeBalance(results2);
+
+		model.addAttribute("tradesSell", trades);
+		
+		
 		return "index";
 	 }	
 	

@@ -18,17 +18,7 @@ public class TradingHistoryListener {
 	@Autowired
 	private TradeEntryRepository tradeEntryRepository;
 
-	@EventHandler
-	void on(SellEvent event) {
-		TradeEntry entry = new TradeEntry();
-		entry.setTraderId(event.getId());
-		entry.setSymbol(event.getSymbol());
-		entry.setShares(event.getShares());
-		entry.setPrice(event.getPrice());
-		entry.setType((short) 0);
 
-		tradeEntryRepository.save(entry);
-	}
 
 	@EventHandler
 	void on(BuyEvent event) {
@@ -42,5 +32,17 @@ public class TradingHistoryListener {
 
 		tradeEntryRepository.save(entry);
 	}
+	
+	@EventHandler
+	void on(SellEvent event) {
+		TradeEntry entry = new TradeEntry();
+		entry.setTraderId(event.getId());
+		entry.setSymbol(event.getSymbol());
+		entry.setShares(0L-event.getShares());
+		entry.setPrice(event.getPrice());
+		entry.setType((short) 0);
+
+		tradeEntryRepository.save(entry);
+	}	
 
 }

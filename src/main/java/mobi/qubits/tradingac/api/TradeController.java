@@ -130,6 +130,7 @@ public class TradeController extends QuoteProvider{
 	@RequestMapping(value = "/api/traders/{id}/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeBalance( @PathVariable String id) {
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
+		initQuoteMap(findSymbols(bals));
 		return getRealtimeBalance(bals);
 	}	
 	
@@ -137,6 +138,7 @@ public class TradeController extends QuoteProvider{
 	@RequestMapping(value = "/api/traders/{id}/realtime-balance/{symbol}", method = RequestMethod.GET)
 	public @ResponseBody RealtimeBalance findRealtimeBalance( @PathVariable String id, @PathVariable String symbol) {
 		TradingBalance bal = tradingBalanceRepository.findByTraderIdAndSymbol(id, symbol);
+		initQuoteMap(bal.getSymbol());
 		return getRealtimeBalance(bal);
 	}
 	
@@ -145,8 +147,11 @@ public class TradeController extends QuoteProvider{
 	@RequestMapping(value = "/api/traders/{id}/trades/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeTradeBalance( @PathVariable String id) {
 		
-		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);		
-		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdAndType(id, (short)1);
+		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
+		
+		initQuoteMap(findSymbols(bals));
+		
+		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdOrderBySymbolAsc(id);
 		
 		List<TradeEntry> results = new ArrayList<TradeEntry>();	
 
@@ -170,6 +175,7 @@ public class TradeController extends QuoteProvider{
 	@RequestMapping(value = "/api/traders/{id}/trades/realtime-balance/{symbol}", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeTradeBalance( @PathVariable String id, @PathVariable String symbol) {
 		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdAndSymbolAndType(id, symbol, (short)1);
+		initQuoteMap(findSymbols2(entries));
 		return getRealtimeTradeBalance(entries);
 	}	
 	

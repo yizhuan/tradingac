@@ -40,10 +40,10 @@
 								<th>Symbol</th>
 								<th>Shares</th>
 								<th>Cost</th>
+								<th>Gain</th>
+								<th>GainPct</th>								
 								<th>Current</th>
 								<th>Prev</th>
-								<th>Gain</th>
-								<th>GainPct</th>
 							</tr>
 						</thead>
 
@@ -52,11 +52,11 @@
 							<tr th:each="b : ${balances}">
 								<td th:text="${b.symbol}">Symbol</td>
 								<td th:text="${b.shares}">Shares</td>
-								<td th:text="${b.costPerShare}">CostPerShare</td>								
+								<td th:text="${b.costPerShare}">CostPerShare</td>
+								<td th:text="${b.gain}">Gain</td>
+								<td th:text="${b.gainPct}">GainPct</td>																							
 								<td th:text="${b.currentQuote}">CurrentQuote</td>
 								<td th:text="${b.prevClose}">Prev</td>
-								<td th:text="${b.gain}">Gain</td>
-								<td th:text="${b.gainPct}">GainPct</td>								
 							</tr>
 
 						</tbody>
@@ -75,7 +75,7 @@
 		</div>
 
 		
-		<p>Individual Transactions</p>
+		<p>Individual Transactions （Buy)</p>
 
 		<div class="row">
 
@@ -91,23 +91,23 @@
 								<th>Symbol</th>
 								<th>Shares</th>
 								<th>Cost</th>
-								<th>Current</th>
-								<th>Prev</th>
 								<th>Gain</th>
 								<th>GainPct</th>
+								<th>Current</th>
+								<th>Prev</th>
 							</tr>
 						</thead>
 
 						<tbody>
 
-							<tr th:each="trade : ${trades}">
+							<tr th:each="trade : ${tradesBuy}">
 								<td th:text="${trade.symbol}">Symbol</td>
 								<td th:text="${trade.shares}">Shares</td>
 								<td th:text="${trade.costPerShare}">CostPerShare</td>
-								<td th:text="${trade.currentQuote}">CurrentQuote</td>
-								<td th:text="${trade.prevClose}">Prev</td>
 								<td th:text="${trade.gain}">Gain</td>
 								<td th:text="${trade.gainPct}">GainPct</td>								
+								<td th:text="${trade.currentQuote}">CurrentQuote</td>
+								<td th:text="${trade.prevClose}">Prev</td>
 							</tr>
 
 						</tbody>
@@ -124,7 +124,55 @@
 			
 		</div>
 		
-		
+	<p>Individual Transactions （Sell)</p>
+
+		<div class="row">
+
+			<div class="col-md-1">
+
+				<div class="datagrid">
+				
+					<table>
+
+						<thead>
+
+							<tr>
+								<th>Symbol</th>
+								<th>Shares</th>
+								<th>Cost</th>
+								<th>Gain</th>
+								<th>GainPct</th>
+								<th>Current</th>
+								<th>Prev</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="trade : ${tradesSell}">
+								<td th:text="${trade.symbol}">Symbol</td>
+								<td th:text="${trade.shares}">Shares</td>
+								<td th:text="${trade.costPerShare}">CostPerShare</td>
+								<td th:text="${trade.gain}">Gain</td>
+								<td th:text="${trade.gainPct}">GainPct</td>								
+								<td th:text="${trade.currentQuote}">CurrentQuote</td>
+								<td th:text="${trade.prevClose}">Prev</td>
+							</tr>
+
+						</tbody>
+
+					</table>
+				</div>
+
+
+			</div>
+			
+			<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
+			<div class="col-md-1"></div>
+			
+		</div>
+				
 		
 		<!-- 
 		<div class="row">
