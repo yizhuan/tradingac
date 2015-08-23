@@ -31,7 +31,7 @@ public class QuoteProvider {
 		return quoteMap.get(symbol);
 	}	
 	
-	protected List<String> findSymbols(List<TradingBalance> bals){
+	protected List<String> findSymbols1(List<TradingBalance> bals){
 		List<String> symbols = new ArrayList<String>();
 		for (TradingBalance b: bals){
 			String s = b.getSymbol();
@@ -60,17 +60,20 @@ public class QuoteProvider {
 	private Map<String, Quote> createQuoteMap(List<String> symbols){		
 		Map<String, Quote> map = new HashMap<String, Quote>();
 		for (String symbol: symbols){
+			Quote q0 = map.get(symbol);
+			if (q0!=null)
+				continue;
 			Quote q = getQuoteFromService(symbol);
 			map.put(symbol,  q);			
 		}
 		return map;
 	}	
 	
-	protected List<RealtimeBalance> getRealtimeBalance(List<TradingBalance> tradingBalances){
+	protected List<RealtimeBalance> getRealtimeOverallBalance(List<TradingBalance> tradingBalances){
 		List<RealtimeBalance> bals = new ArrayList<RealtimeBalance>();
 		for (TradingBalance bal : tradingBalances){
 			RealtimeBalance rt = getRealtimeBalance(bal);
-			if (rt!=null)
+			if (rt!=null && rt.getShares()>1L)
 				bals.add(rt);
 		}		
 		return bals;

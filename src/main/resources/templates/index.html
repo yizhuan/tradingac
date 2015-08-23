@@ -28,7 +28,7 @@
 		
 		<div class="row">
 
-			<div class="col-md-1">
+			<div class="col-sm-12 col-lg-12">
 
 				<div class="datagrid">
 				
@@ -67,11 +67,7 @@
 
 
 			</div>
-			
-			<div class="col-md-1"></div>
-			<div class="col-md-1"></div>
-			<div class="col-md-1"></div>
-			
+						
 		</div>
 
 		
@@ -79,7 +75,7 @@
 
 		<div class="row">
 
-			<div class="col-md-1">
+			<div class="col-sm-12 col-lg-12">
 
 				<div class="datagrid">
 				
@@ -118,17 +114,13 @@
 
 			</div>
 			
-			<div class="col-md-1"></div>
-			<div class="col-md-1"></div>
-			<div class="col-md-1"></div>
-			
 		</div>
 		
 	<p>Individual Transactions （Sell)</p>
 
 		<div class="row">
 
-			<div class="col-md-1">
+			<div class="col-sm-12 col-lg-12">
 
 				<div class="datagrid">
 				
@@ -139,11 +131,7 @@
 							<tr>
 								<th>Symbol</th>
 								<th>Shares</th>
-								<th>Cost</th>
-								<th>Gain</th>
-								<th>GainPct</th>
-								<th>Current</th>
-								<th>Prev</th>
+								<th>Price</th>
 							</tr>
 						</thead>
 
@@ -152,11 +140,7 @@
 							<tr th:each="trade : ${tradesSell}">
 								<td th:text="${trade.symbol}">Symbol</td>
 								<td th:text="${trade.shares}">Shares</td>
-								<td th:text="${trade.costPerShare}">CostPerShare</td>
-								<td th:text="${trade.gain}">Gain</td>
-								<td th:text="${trade.gainPct}">GainPct</td>								
-								<td th:text="${trade.currentQuote}">CurrentQuote</td>
-								<td th:text="${trade.prevClose}">Prev</td>
+								<td th:text="${trade.price}">SoldAt</td>
 							</tr>
 
 						</tbody>
@@ -167,13 +151,25 @@
 
 			</div>
 			
-			<div class="col-md-1"></div>
-			<div class="col-md-1"></div>
-			<div class="col-md-1"></div>
-			
 		</div>
+<!-- 
+		<div class="row">
+			
+			<form action="#" th:action="@{/seedstartermng}" th:object="${seedStarter}" method="post">
+    			<input type="text" th:field="*{datePlanted}" />
+
+				<div>
+					<label th:for="${#ids.next('covered')}"
+						th:text="#{seedstarter.covered}">Covered</label> <input
+						type="checkbox" th:field="*{covered}" />
+				</div>
 				
-		
+				<button type="submit" name="addRow" th:text="#{seedstarter.row.add}">Add row</button>
+				
+			</form>
+		</div>				
+
+ -->		
 		<!-- 
 		<div class="row">
 			<div class="col-md-8">.col-md-8</div>

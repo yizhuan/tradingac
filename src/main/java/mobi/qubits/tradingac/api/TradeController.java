@@ -130,8 +130,8 @@ public class TradeController extends QuoteProvider{
 	@RequestMapping(value = "/api/traders/{id}/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeBalance( @PathVariable String id) {
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
-		initQuoteMap(findSymbols(bals));
-		return getRealtimeBalance(bals);
+		initQuoteMap(findSymbols1(bals));
+		return getRealtimeOverallBalance(bals);
 	}	
 	
 	//realtime balance on trading account
@@ -149,7 +149,7 @@ public class TradeController extends QuoteProvider{
 		
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
 		
-		initQuoteMap(findSymbols(bals));
+		initQuoteMap(findSymbols1(bals));
 		
 		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdOrderBySymbolAsc(id);
 		

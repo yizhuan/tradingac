@@ -12,6 +12,7 @@ import mobi.qubits.tradingac.query.trade.TradingBalanceRepository;
 import mobi.qubits.tradingac.quote.QuoteProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  */
 @Controller
-public class HomeController extends QuoteProvider{
+public class HomeController extends QuoteProvider implements ErrorController{
 	
 	@Autowired
 	private TraderEntryRepository traderEntryRepository;
@@ -35,64 +36,55 @@ public class HomeController extends QuoteProvider{
 	@Autowired
 	private TradingBalanceRepository tradingBalanceRepository;
 
-	 @RequestMapping("/index.html")
-	 //public String home(@RequestParam(value="id", required=false, defaultValue="752fe7ef-b94a-45ab-880a-19097824a4a4") String id, Model model) {
-	 public String home(@RequestParam(value="id", required=false, defaultValue="8bb53941-d9d3-40a6-9d42-cbf2755bf7db") String id, Model model) {
+	 //@RequestMapping("/index.html")
+	@RequestMapping("/")
+	 public String home(@RequestParam(value="id", required=false, defaultValue="752fe7ef-b94a-45ab-880a-19097824a4a4") String id, Model model) {
+	 //public String home(@RequestParam(value="id", required=false, defaultValue="8bb53941-d9d3-40a6-9d42-cbf2755bf7db") String id, Model model) {
 
 		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
+		List<TradeEntry> buys = tradeEntryRepository.findByTraderIdAndType(id, (short)1);
+		List<TradeEntry> sells = tradeEntryRepository.findByTraderIdAndType(id, (short)0);
 		
-		initQuoteMap(findSymbols(bals));
+		List<String> symbols = findSymbols1(bals);
+		List<String> symbols2 = findSymbols2(buys);
+		List<String> symbols3 = findSymbols2(sells);
+		symbols.addAll(symbols2);
+		symbols.addAll(symbols3);
 		
-		List<RealtimeBalance> balances = getRealtimeBalance(bals);
+		initQuoteMap(symbols);		
 		
+		List<RealtimeBalance> balances = getRealtimeOverallBalance(bals);		
 		model.addAttribute("balances", balances);
 		 		 
-		List<TradeEntry> entries1 = tradeEntryRepository.findByTraderIdAndType(id, (short)1);
-		
+								
 		List<TradeEntry> results1 = new ArrayList<TradeEntry>();	
 
-		//we will only list those with share balances.
-		
 		for (TradingBalance b: bals){
-			if(b.getShares()<1L){
-				continue;
-			}
-			for (TradeEntry e: entries1){			
+			for (TradeEntry e: buys){			
 				if (e.getSymbol().equals(b.getSymbol())){
 					results1.add(e);
 				}
 			}
 		}
-		
-		List<RealtimeBalance> tradesBuy = getRealtimeTradeBalance(results1);
-
-		model.addAttribute("tradesBuy", tradesBuy);
 				
+		List<RealtimeBalance> tradesBuy = getRealtimeTradeBalance(results1);
+		model.addAttribute("tradesBuy", tradesBuy);	
 		
-		List<TradeEntry> entries2 = tradeEntryRepository.findByTraderIdAndType(id, (short)0);
-		
-		List<TradeEntry> results2 = new ArrayList<TradeEntry>();	
-
-		//we will only list those with share balances.
-		
-		for (TradingBalance b: bals){
-			if(b.getShares()<1L){
-				continue;
-			}
-			for (TradeEntry e: entries2){			
-				if (e.getSymbol().equals(b.getSymbol())){
-					results2.add(e);
-				}
-			}
-		}
-		
-		List<RealtimeBalance> trades = getRealtimeTradeBalance(results2);
-
-		model.addAttribute("tradesSell", trades);
-		
+		model.addAttribute("tradesSell", sells);		
 		
 		return "index";
 	 }	
 	
+	@RequestMapping("/error")
+	public String error() {
+		return "404";
+	}
 
+	@Override
+	public String getErrorPath() {
+		return "/error";
+	}
+	
 }
+
+
