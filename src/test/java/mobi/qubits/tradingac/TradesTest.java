@@ -3,13 +3,16 @@ package mobi.qubits.tradingac;
 import static org.junit.Assert.assertTrue;
 import mobi.qubits.tradingac.api.requests.TraderRequest;
 import mobi.qubits.tradingac.api.requests.TradingRequest;
-import mobi.qubits.tradingac.domain.commands.BuyCommand;
-import mobi.qubits.tradingac.domain.commands.RegisterNewTraderCommand;
-import mobi.qubits.tradingac.domain.commands.SellCommand;
-import mobi.qubits.tradingac.query.trade.TradeEntry;
-import mobi.qubits.tradingac.query.trade.TradeEntryRepository;
-import mobi.qubits.tradingac.query.trade.TradingBalance;
-import mobi.qubits.tradingac.query.trade.TradingBalanceRepository;
+import mobi.qubits.tradingac.domain.quote.commands.CreateStockCommand;
+import mobi.qubits.tradingac.domain.quote.commands.UpdateQuoteCommand;
+import mobi.qubits.tradingac.domain.trader.commands.BuyCommand;
+import mobi.qubits.tradingac.domain.trader.commands.RegisterNewTraderCommand;
+import mobi.qubits.tradingac.domain.trader.commands.SellCommand;
+import mobi.qubits.tradingac.query.trade.AssetEntity;
+import mobi.qubits.tradingac.query.trade.AssetEntityRepository;
+import mobi.qubits.tradingac.query.trade.QuoteEntity;
+import mobi.qubits.tradingac.query.trade.QuoteEntityRepository;
+import mobi.qubits.tradingac.query.trade.TradeEntityRepository;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.DefaultIdentifierFactory;
@@ -33,88 +36,77 @@ public class TradesTest {
 	private final IdentifierFactory identifierFactory = new DefaultIdentifierFactory();
 	
 	@Autowired
-	private TradeEntryRepository tradeEntryRepository;
+	private TradeEntityRepository tradeEntryRepository;
 
 	@Autowired
-	private TradingBalanceRepository tradingAccountEntryRepository;
+	private AssetEntityRepository assetEntityRepository;
+	
+	@Autowired
+	private QuoteEntityRepository quoteEntityRepository;
 
 	@Autowired
 	private CommandGateway cmdGateway;
 	
+	private String symbol1 = "600036";
+	private String symbol2 = "600406";
+		
 	private String id;// trader ID;
+	
+	
+	
 	
 	@Before
 	public void setUp(){
 		
+		
 		this.id = identifierFactory.generateIdentifier();	
 		System.out.println("======"+id);
-		TraderRequest traderReq = new TraderRequest("John");
-		cmdGateway.send(new RegisterNewTraderCommand(id, traderReq.getName()));
+		TraderRequest traderReq = new TraderRequest("John", 200000.0f);
+		cmdGateway.send(new RegisterNewTraderCommand(id, traderReq.getName(), traderReq.getInvestment()));
+				
+		
+		QuoteEntity quoteEntity = quoteEntityRepository.findOne(symbol1);
+		if (quoteEntity==null){
+			cmdGateway.send(new CreateStockCommand(symbol1));
+		}
+		
+		cmdGateway.send(new UpdateQuoteCommand(symbol1));
+		
+		
 	}
 	
-	//@Test
+	@Test
 	public void testBuying() throws InterruptedException{
 		
-		TradingRequest req = new TradingRequest("FB", 100L, 92.5F, (short)1);
+		TradingRequest req = new TradingRequest(symbol1, 100L,17.0F, (short)1);
 		
 		cmdGateway.send(new BuyCommand(id, req.getSymbol(), req
 				.getShares(), req.getPrice()));
-		
-		/*
-		Thread.sleep(1000);
-		
-		TradeEntry buying = tradeEntryRepository.findOne(id);
-		assertTrue(buying.getSymbol().equals(req.getSymbol()));
-		assertTrue(buying.getShares().equals(req.getShares()));
-		assertTrue(buying.getPrice().equals(req.getPrice()));
-		assertTrue(buying.getType().equals(req.getType()));
-		*/
-	}
-	
-	//@Test
-	public void testSelling() throws InterruptedException{
-		
-		TradingRequest req = new TradingRequest("FB", 100L, 92.5F, (short)0);
-		
-		cmdGateway.send(new SellCommand(id, req.getSymbol(), req
-				.getShares(), req.getPrice()));
-		
-		/*
-		Thread.sleep(1000);
-		
-		TradeEntry selling = tradeEntryRepository.findOne(id);
-		assertTrue(selling.getSymbol().equals(req.getSymbol()));
-		assertTrue(selling.getShares().equals(req.getShares()));
-		assertTrue(selling.getPrice().equals(req.getPrice()));
-		assertTrue(selling.getType().equals(req.getType()));
-		*/
 	}	
-		
 	
 	@Test
 	public void testBuyAndSell() throws InterruptedException{
 	
-		String symbol = "600036";
 		Float price = 17.8f;
 		
 	
-		TradingBalance ac = tradingAccountEntryRepository.findByTraderIdAndSymbol(id, symbol);
+		AssetEntity ac = assetEntityRepository.findByTraderIdAndSymbol(id, symbol1);
 		Long shares = ac==null? 0L: ac.getShares();
 		
 		
-		TradingRequest breq = new TradingRequest(symbol, 100L, price, (short)1);
+		TradingRequest breq = new TradingRequest(symbol1, 100L, price, (short)1);
 		
 		cmdGateway.send(new BuyCommand(id, breq.getSymbol(), breq
 				.getShares(), breq.getPrice()));		
 				
-		TradingRequest sreq = new TradingRequest(symbol, 100L, price, (short)0);
+		TradingRequest sreq = new TradingRequest(symbol1, 100L, price, (short)0);
 		
 		cmdGateway.send(new SellCommand(id, sreq.getSymbol(), sreq
 				.getShares(), sreq.getPrice()));
 		
 		Thread.sleep(1000);
 					
-		TradingBalance ac1 = tradingAccountEntryRepository.findByTraderIdAndSymbol(id, symbol);
+		AssetEntity ac1 = assetEntityRepository.findByTraderIdAndSymbol(id, symbol1);
 		assertTrue(ac1.getShares().equals(shares) );
 		
 	}		

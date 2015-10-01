@@ -18,6 +18,8 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    
   </head>
   <body>
     
@@ -79,6 +81,7 @@
 
 				<div class="datagrid">
 				
+				<form>
 					<table>
 
 						<thead>
@@ -96,19 +99,21 @@
 
 						<tbody>
 
-							<tr th:each="trade : ${tradesBuy}">
-								<td th:text="${trade.symbol}">Symbol</td>
-								<td th:text="${trade.shares}">Shares</td>
-								<td th:text="${trade.costPerShare}">CostPerShare</td>
-								<td th:text="${trade.gain}">Gain</td>
-								<td th:text="${trade.gainPct}">GainPct</td>								
-								<td th:text="${trade.currentQuote}">CurrentQuote</td>
-								<td th:text="${trade.prevClose}">Prev</td>
+							<tr th:each="buy : ${tradesBuy}">
+								<td th:text="${buy.symbol}">Symbol</td>
+								<td th:text="${buy.shares}">Shares</td>
+								<td th:text="${buy.costPerShare}">CostPerShare</td>
+								<td th:text="${buy.gain}">Gain</td>
+								<td th:text="${buy.gainPct}">GainPct</td>								
+								<td th:text="${buy.currentQuote}">CurrentQuote</td>
+								<td th:text="${buy.prevClose}">Prev</td>								
 							</tr>
 
 						</tbody>
 
 					</table>
+					
+					</form>
 				</div>
 
 
@@ -137,10 +142,10 @@
 
 						<tbody>
 
-							<tr th:each="trade : ${tradesSell}">
-								<td th:text="${trade.symbol}">Symbol</td>
-								<td th:text="${trade.shares}">Shares</td>
-								<td th:text="${trade.price}">SoldAt</td>
+							<tr th:each="sell : ${tradesSell}">
+								<td th:text="${sell.symbol}">Symbol</td>
+								<td th:text="${sell.shares}">Shares</td>
+								<td th:text="${sell.price}">SoldAt</td>
 							</tr>
 
 						</tbody>

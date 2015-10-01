@@ -52,7 +52,7 @@ public class SinaQuoteService implements QuoteService{
 		sq.setLow(strToFloat(values[5]));
 		
 		sq.setDate(values[30]);
-		sq.setTimestamp(values[31]);
+		sq.setQuoteTime(values[31]);
 		
 		return sq;
 	}

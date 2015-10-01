@@ -5,7 +5,7 @@ package mobi.qubits.tradingac.query.trade;
  * @author yizhuan
  *
  */
-public class RealtimeBalance extends TradingBalance{
+public class RealtimeBalance extends AssetEntity{
 		
 	private Float prevClose;
 	private Float currentQuote;

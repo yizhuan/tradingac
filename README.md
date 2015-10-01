@@ -1,5 +1,17 @@
 # tradingac
 
+Rules: 
+	You can only sell existing shares.
+	
+Seq:
+
+1. load account overview
+	
+
+	
+	
+
+
 This application uses:
 
 - Domain Driven Design

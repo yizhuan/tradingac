@@ -70,24 +70,6 @@ public class AxonConfiguration {
 		return factory;
 	}
 	
-	@Bean
-	public EventSourcingRepository<Trader> traderRepository() {
 
-		DefaultMongoTemplate template = new DefaultMongoTemplate(this.mongo);
-		MongoEventStore eventStore = new MongoEventStore(template
-				);
-		EventSourcingRepository<Trader> repository = new EventSourcingRepository<Trader>(
-				Trader.class, eventStore);
-		repository.setEventBus(eventBus());
-		return repository;
-	}	
-
-	@Bean
-	public AggregateAnnotationCommandHandler<Trader> TraderCommandHandler() {
-		AggregateAnnotationCommandHandler<Trader> commandHandler = AggregateAnnotationCommandHandler
-				.subscribe(Trader.class, traderRepository(), commandBus());
-		return commandHandler;
-	}
-	
 
 }

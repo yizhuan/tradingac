@@ -1,11 +1,13 @@
 package mobi.qubits.tradingac.domain.trader;
 
-import mobi.qubits.tradingac.domain.commands.BuyCommand;
-import mobi.qubits.tradingac.domain.commands.RegisterNewTraderCommand;
-import mobi.qubits.tradingac.domain.commands.SellCommand;
-import mobi.qubits.tradingac.domain.events.BuyEvent;
-import mobi.qubits.tradingac.domain.events.RegisterNewTraderEvent;
-import mobi.qubits.tradingac.domain.events.SellEvent;
+import java.util.List;
+
+import mobi.qubits.tradingac.domain.trader.commands.BuyCommand;
+import mobi.qubits.tradingac.domain.trader.commands.RegisterNewTraderCommand;
+import mobi.qubits.tradingac.domain.trader.commands.SellCommand;
+import mobi.qubits.tradingac.domain.trader.events.BuyEvent;
+import mobi.qubits.tradingac.domain.trader.events.RegisterNewTraderEvent;
+import mobi.qubits.tradingac.domain.trader.events.SellEvent;
 
 import org.axonframework.commandhandling.annotation.CommandHandler;
 import org.axonframework.eventsourcing.annotation.AbstractAnnotatedAggregateRoot;
@@ -20,7 +22,9 @@ import org.axonframework.eventsourcing.annotation.EventSourcingHandler;
 public class Trader extends AbstractAnnotatedAggregateRoot<String>{
 
 	@AggregateIdentifier
-	private String id;
+	private String id;	
+	
+	private List<Share> shares;
 	
 	Trader() {
 		
@@ -28,7 +32,7 @@ public class Trader extends AbstractAnnotatedAggregateRoot<String>{
 	
 	@CommandHandler
 	public Trader(RegisterNewTraderCommand cmd) {	
-		apply(new RegisterNewTraderEvent(cmd.getId(), cmd.getName()));
+		apply(new RegisterNewTraderEvent(cmd.getId(), cmd.getName(), cmd.getInvestment()));
 	}	
 	
 	
@@ -39,7 +43,7 @@ public class Trader extends AbstractAnnotatedAggregateRoot<String>{
 
 	@CommandHandler
 	public void on(SellCommand cmd) {	
-		apply(new SellEvent(cmd.getId(), cmd.getSymbol(), cmd.getShares(), cmd.getPrice()));
+		apply(new SellEvent(cmd.getId(), cmd.getSymbol(), cmd.getShares(), cmd.getPrice(), cmd.getCostPerShare()));
 	}
 	
 

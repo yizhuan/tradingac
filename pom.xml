@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>mobi.qubits.tradingac</groupId>
-    <artifactId>tradingac</artifactId>
+    <artifactId>tradingapp</artifactId>
     <version>0.2.0</version>
 
     <parent>
@@ -39,10 +39,12 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         
+        <!-- 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+         -->
         
         
         <!-- tag::tests[] -->

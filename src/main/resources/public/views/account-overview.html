@@ -1,0 +1,79 @@
+
+<p>Account Overview</p>
+
+<div class="row">
+
+	<div class="col-sm-12 col-lg-12">
+
+		<div class="well well-sm">
+
+			<button type="button" class="btn btn-primary btn-sm">
+				Investment <span class="badge">{{summary.investment}}</span>
+			</button>
+			<button type="button" class="btn btn-success btn-sm">
+				Value <span class="badge">{{summary.currentValue}}</span>
+			</button>
+
+
+			<button type="button" class="btn btn-primary btn-sm">
+				Asset Value <span class="badge">{{summary.assetValue}}</span>
+			</button>
+			<button type="button" class="btn btn-success btn-sm">
+				Cash <span class="badge">{{summary.investment-summary.assetValue}}</span>
+			</button>		
+			
+			<button type="button" class="btn btn-primary btn-sm">
+				Gain % <span class="badge">{{summary.gainPct}}</span>
+			</button>
+			<button type="button" class="btn btn-success btn-sm">
+				Gain <span class="badge">{{summary.gain}} </span>
+			</button>
+
+
+		</div>
+
+
+		<div ng-controller="BuyCtrl" class="span4">
+
+			<input type="text" id="field_id_symbol" ng-model="buyl.symbol"
+				placeholder="Symbol"></input> <input type="text"
+				id="field_id_shares" ng-model="buy.shares"
+				placeholder="Num of Shares"> </input> <input type="text"
+				id="field_id_price" ng-model="buy.price"
+				placeholder="Buying Price"></input>
+
+			<button id="submitBuy" class="btn btn-sm" type="button" 
+                    data-ng-disabled="!buy.symbol || !buy.shares || !buy.price" 
+                    data-ng-click="submit()">Buy Shares</button>
+		</div>
+	
+	
+        <div>
+            
+                <div class="span3 card" data-ng-repeat="asset in assets">
+                    <button class="btn close cardClose" data-ng-click="deleteAsset(asset.symbol)">&times;</button>
+                    <div class="cardHeader">{{asset.symbol}}</div>
+                    <div class="cardBody">
+                    	<table>
+                    		<tbody>
+		                    	<tr><td>Shares: </td><td>{{asset.shares}}</td>
+		                    	<tr><td>Gain%: </td><td>{{asset.gainPct}}</td>
+		                    	<tr><td>Gain: </td><td> {{asset.gain}}</td>
+		                    	<tr><td>Cost: </td><td>{{asset.cost}}</td>
+		                    	<tr><td>Current Price: </td><td>{{asset.currentPrice}}</td>
+		                    	<tr><td>Current Value: </td><td>{{asset.currentValue}}</td>
+                    		</tbody>
+                    	</table>
+                    </div>
+                    <a href="#/traders/{{traderId}}/{{asset.symbol}}/details" class="cardBody btn-link">View {{asset.symbol}}</a>
+                </div>
+            
+
+        </div>	
+
+
+	</div>
+	
+
+
+</div>

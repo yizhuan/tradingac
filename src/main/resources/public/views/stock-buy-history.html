@@ -1,0 +1,47 @@
+
+<p>Stock Details</p>
+
+<div class="row">
+
+	<div class="col-sm-12 col-lg-12">
+
+		<div class="datagrid">
+			<form>
+				<table>
+
+					<thead>
+
+						<tr>
+							<th>Symbol</th>
+							<th>Shares</th>
+							<th>Cost</th>
+							<th>Gain %</th>
+							<th>Gain</th>														
+							<th>Current</th>
+							<th>Prev</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+
+					<tbody>
+
+						<tr ng-repeat="buy in buys">
+							<td>{{buy.symbol}}</td>
+							<td>{{buy.shares}}</td>
+							<td>{{buy.price}}</td>							
+							<td>{{buy.gainPct}}</td>
+							<td>{{buy.gain}}</td>
+							<td>{{buy.currentQuote}}</td>
+							<td>{{buy.prevClose}}</td>
+							<td>Date</td>
+						</tr>
+
+					</tbody>
+
+				</table>
+
+			</form>
+		</div>
+	</div>
+
+</div>

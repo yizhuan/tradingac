@@ -1,6 +1,6 @@
 package mobi.qubits.tradingac.quote.sina;
 
-import mobi.qubits.tradingac.quote.Quote;
+import mobi.qubits.tradingac.quote.Ticker;
 
 /**
  * A real-time quote value object.
@@ -8,7 +8,7 @@ import mobi.qubits.tradingac.quote.Quote;
  * @author yizhuan
  *
  */
-public class SinaQuote extends Quote{
+public class SinaQuote extends Ticker{
 	
 	public SinaQuote() {
 		super();

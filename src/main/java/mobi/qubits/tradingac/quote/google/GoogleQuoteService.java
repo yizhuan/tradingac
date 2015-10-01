@@ -94,7 +94,7 @@ public class GoogleQuoteService implements QuoteService {
 		q.setSymbol(symbol);
 		float currentQuote = strToFloat(hm.get("l"));
 		q.setCurrentQuote(currentQuote);
-		q.setTimestamp(hm.get("ltt"));
+		q.setQuoteTime(hm.get("ltt"));
 		q.setDate(hm.get("lt"));
 		
 		String change = hm.get("c");

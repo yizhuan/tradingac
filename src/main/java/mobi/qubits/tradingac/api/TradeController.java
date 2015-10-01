@@ -7,16 +7,16 @@ import javax.validation.Valid;
 
 import mobi.qubits.tradingac.api.requests.TraderRequest;
 import mobi.qubits.tradingac.api.requests.TradingRequest;
-import mobi.qubits.tradingac.domain.commands.BuyCommand;
-import mobi.qubits.tradingac.domain.commands.RegisterNewTraderCommand;
-import mobi.qubits.tradingac.domain.commands.SellCommand;
+import mobi.qubits.tradingac.domain.trader.commands.BuyCommand;
+import mobi.qubits.tradingac.domain.trader.commands.RegisterNewTraderCommand;
+import mobi.qubits.tradingac.domain.trader.commands.SellCommand;
 import mobi.qubits.tradingac.query.trade.RealtimeBalance;
-import mobi.qubits.tradingac.query.trade.TradeEntry;
-import mobi.qubits.tradingac.query.trade.TradeEntryRepository;
-import mobi.qubits.tradingac.query.trade.TraderEntry;
-import mobi.qubits.tradingac.query.trade.TraderEntryRepository;
-import mobi.qubits.tradingac.query.trade.TradingBalance;
-import mobi.qubits.tradingac.query.trade.TradingBalanceRepository;
+import mobi.qubits.tradingac.query.trade.TradeEntity;
+import mobi.qubits.tradingac.query.trade.TradeEntityRepository;
+import mobi.qubits.tradingac.query.trade.TraderEntity;
+import mobi.qubits.tradingac.query.trade.TraderEntityRepository;
+import mobi.qubits.tradingac.query.trade.AssetEntity;
+import mobi.qubits.tradingac.query.trade.AssetEntityRepository;
 import mobi.qubits.tradingac.quote.QuoteProvider;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -47,14 +47,14 @@ public class TradeController extends QuoteProvider{
 	private final IdentifierFactory identifierFactory = new DefaultIdentifierFactory();
 
 	@Autowired
-	private TraderEntryRepository traderEntryRepository;
+	private TraderEntityRepository traderEntryRepository;
 	
 	@Autowired
-	private TradeEntryRepository tradeEntryRepository;
+	private TradeEntityRepository tradeEntryRepository;
 
 
 	@Autowired
-	private TradingBalanceRepository tradingBalanceRepository;
+	private AssetEntityRepository tradingBalanceRepository;
 
 
 	@Autowired
@@ -64,7 +64,7 @@ public class TradeController extends QuoteProvider{
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public ResponseEntity<?> createTrader(@RequestBody @Valid TraderRequest request, UriComponentsBuilder b) {
 		String id = identifierFactory.generateIdentifier();
-		cmdGateway.send(new RegisterNewTraderCommand(id, request.getName()));
+		cmdGateway.send(new RegisterNewTraderCommand(id, request.getName(), request.getInvestment()));
 
 		UriComponents uriComponents = b.path("/api/traders/{id}").buildAndExpand(
 				id);
@@ -72,7 +72,7 @@ public class TradeController extends QuoteProvider{
 		headers.setLocation(uriComponents.toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}	
-	
+	/*
 	@RequestMapping(value = "/api/traders/{id}/buy", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void buy(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
@@ -80,48 +80,52 @@ public class TradeController extends QuoteProvider{
 				.getShares(), request.getPrice()));
 	}
 	
+	
 	@RequestMapping(value = "/api/traders/{id}/sell", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void sell(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
 			cmdGateway.send(new SellCommand(id, request.getSymbol(), request
 					.getShares(), request.getPrice()));
-	}		
+	}
+	*/		
 	
 	@RequestMapping(value = "/api/traders/{id}", method = RequestMethod.GET)
-	public TraderEntry findlTrade(@PathVariable String id) {
+	public TraderEntity findlTrade(@PathVariable String id) {
 		return traderEntryRepository.findOne(id);
 	}
 	
 	@RequestMapping(value = "/api/traders", method = RequestMethod.GET)
-	public @ResponseBody List<TraderEntry> findlAllTraders() {
+	public @ResponseBody List<TraderEntity> findlAllTraders() {
 		return traderEntryRepository.findAll();
 	}
 	
 	@RequestMapping(value = "/api/traders/{id}/trades", method = RequestMethod.GET)
-	public @ResponseBody List<TradeEntry> find( @PathVariable String id) {
+	public @ResponseBody List<TradeEntity> find( @PathVariable String id) {
 		return tradeEntryRepository.findByTraderId(id);
 	}
 	
 			
 	@RequestMapping(value = "/api/traders/{id}/trades/{symbol}", method = RequestMethod.GET)
-	public @ResponseBody List<TradeEntry> find( @PathVariable String id, @PathVariable String symbol) {
+	public @ResponseBody List<TradeEntity> find( @PathVariable String id, @PathVariable String symbol) {
 		return tradeEntryRepository.findByTraderIdAndSymbol(id, symbol);
 	}
 
+	/*
 	@RequestMapping(value = "/api/traders/{id}/trades/{symbol}/{type}", method = RequestMethod.GET)
-	public @ResponseBody List<TradeEntry> findlAll(@PathVariable String id, @PathVariable String symbol,  @PathVariable Short type) {
+	public @ResponseBody List<TradeEntity> findlAll(@PathVariable String id, @PathVariable String symbol,  @PathVariable Short type) {
 		return tradeEntryRepository.findByTraderIdAndSymbolAndType(id, symbol, type);
 	}
+	*/
 
 	
 	@RequestMapping(value = "/api/traders/{id}/balance", method = RequestMethod.GET)
-	public @ResponseBody List<TradingBalance> findBalance( @PathVariable String id) {
+	public @ResponseBody List<AssetEntity> findBalance( @PathVariable String id) {
 		return tradingBalanceRepository.findByTraderId(id);
 	}	
 	
 	
 	@RequestMapping(value = "/api/traders/{id}/balance/{symbol}", method = RequestMethod.GET)
-	public @ResponseBody TradingBalance findBalance( @PathVariable String id, @PathVariable String symbol) {
+	public @ResponseBody AssetEntity findBalance( @PathVariable String id, @PathVariable String symbol) {
 		return tradingBalanceRepository.findByTraderIdAndSymbol(id, symbol);
 	}
 	
@@ -129,7 +133,7 @@ public class TradeController extends QuoteProvider{
 	//realtime balance on trading account
 	@RequestMapping(value = "/api/traders/{id}/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeBalance( @PathVariable String id) {
-		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
+		List<AssetEntity> bals = tradingBalanceRepository.findByTraderId(id);
 		initQuoteMap(findSymbols1(bals));
 		return getRealtimeOverallBalance(bals);
 	}	
@@ -137,7 +141,7 @@ public class TradeController extends QuoteProvider{
 	//realtime balance on trading account
 	@RequestMapping(value = "/api/traders/{id}/realtime-balance/{symbol}", method = RequestMethod.GET)
 	public @ResponseBody RealtimeBalance findRealtimeBalance( @PathVariable String id, @PathVariable String symbol) {
-		TradingBalance bal = tradingBalanceRepository.findByTraderIdAndSymbol(id, symbol);
+		AssetEntity bal = tradingBalanceRepository.findByTraderIdAndSymbol(id, symbol);
 		initQuoteMap(bal.getSymbol());
 		return getRealtimeBalance(bal);
 	}
@@ -147,21 +151,21 @@ public class TradeController extends QuoteProvider{
 	@RequestMapping(value = "/api/traders/{id}/trades/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeTradeBalance( @PathVariable String id) {
 		
-		List<TradingBalance> bals = tradingBalanceRepository.findByTraderId(id);
+		List<AssetEntity> bals = tradingBalanceRepository.findByTraderId(id);
 		
 		initQuoteMap(findSymbols1(bals));
 		
-		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdOrderBySymbolAsc(id);
+		List<TradeEntity> entries = tradeEntryRepository.findByTraderIdOrderBySymbolAsc(id);
 		
-		List<TradeEntry> results = new ArrayList<TradeEntry>();	
+		List<TradeEntity> results = new ArrayList<TradeEntity>();	
 
 		//we will only list those with share balances.
 		
-		for (TradingBalance b: bals){
+		for (AssetEntity b: bals){
 			if(b.getShares()<1L){
 				continue;
 			}
-			for (TradeEntry e: entries){			
+			for (TradeEntity e: entries){			
 				if (e.getSymbol().equals(b.getSymbol())){
 					results.add(e);
 				}
@@ -172,9 +176,9 @@ public class TradeController extends QuoteProvider{
 	}
 	
 	//realtime balance on historical trades (buying) showing historical gain/loss against current quote
-	@RequestMapping(value = "/api/traders/{id}/trades/realtime-balance/{symbol}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/traders/{id}/trades/{symbol}/realtime-balance", method = RequestMethod.GET)
 	public @ResponseBody List<RealtimeBalance> findRealtimeTradeBalance( @PathVariable String id, @PathVariable String symbol) {
-		List<TradeEntry> entries = tradeEntryRepository.findByTraderIdAndSymbolAndType(id, symbol, (short)1);
+		List<TradeEntity> entries = tradeEntryRepository.findByTraderIdAndSymbolAndType(id, symbol, (short)1);
 		initQuoteMap(findSymbols2(entries));
 		return getRealtimeTradeBalance(entries);
 	}	

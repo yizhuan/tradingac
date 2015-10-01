@@ -1,8 +1,8 @@
 package mobi.qubits.tradingac.query.trade;
 
-import mobi.qubits.tradingac.domain.events.BuyEvent;
-import mobi.qubits.tradingac.domain.events.RegisterNewTraderEvent;
-import mobi.qubits.tradingac.domain.events.SellEvent;
+import mobi.qubits.tradingac.domain.trader.events.BuyEvent;
+import mobi.qubits.tradingac.domain.trader.events.RegisterNewTraderEvent;
+import mobi.qubits.tradingac.domain.trader.events.SellEvent;
 
 import org.axonframework.eventhandling.annotation.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,26 +17,26 @@ import org.springframework.stereotype.Component;
 public class TraderListener {
 
 	@Autowired
-	private TraderEntryRepository traderEntryRepository;
+	private TraderEntityRepository traderEntryRepository;
 
 	@Autowired
-	private TradingBalanceRepository tradingAccountRepository;
+	private AssetEntityRepository tradingAccountRepository;
 
 	@EventHandler
 	void on(RegisterNewTraderEvent event) {
-		TraderEntry entry = new TraderEntry(event.getId(), event.getName());
+		TraderEntity entry = new TraderEntity(event.getId(), event.getName(), event.getInvestment());
 		traderEntryRepository.save(entry);
 	}
 
 	@EventHandler
 	void on(BuyEvent event) {
 
-		TradingBalance acc = tradingAccountRepository.findByTraderIdAndSymbol(
+		AssetEntity acc = tradingAccountRepository.findByTraderIdAndSymbol(
 				event.getId(), event.getSymbol());
 
 		if (acc == null) {
 
-			TradingBalance acc1 = new TradingBalance();
+			AssetEntity acc1 = new AssetEntity();
 
 			acc1.setTraderId(event.getId());
 			acc1.setSymbol(event.getSymbol());
@@ -67,11 +67,11 @@ public class TraderListener {
 	@EventHandler
 	void on(SellEvent event) {
 
-		TradingBalance acc = tradingAccountRepository.findByTraderIdAndSymbol(
+		AssetEntity acc = tradingAccountRepository.findByTraderIdAndSymbol(
 				event.getId(), event.getSymbol());
 
 		if (acc == null) {
-			TradingBalance acc1 = new TradingBalance();
+			AssetEntity acc1 = new AssetEntity();
 			
 			acc1.setTraderId(event.getId());			
 			acc1.setSymbol(event.getSymbol());

@@ -1,0 +1,89 @@
+
+
+<div class="row">
+
+	<div class="col-sm-12 col-lg-12">
+
+
+		<h3>Buy History</h3>
+
+
+		<div ng-controller="SellCtrl" class="span4">
+
+			<input type="text" id="field_id_symbol" ng-model="sell.symbol"
+				placeholder="Symbol"></input> <input type="text"
+				id="field_id_shares" ng-model="sell.shares"
+				placeholder="Num of Shares"> </input> <input type="text"
+				id="field_id_price" ng-model="sell.price"
+				placeholder="Selling Price"></input>
+
+			<button id="submitSell" class="btn btn-sm" type="button" 
+                    data-ng-disabled="!sell.symbol || !sell.shares || !sell.price" 
+                    data-ng-click="submit()">Sell Shares</button>
+		</div>
+
+		<br />		
+
+		<div ng-controller="BuyHistoryCtrl">
+
+			<table class="table table-hover table-striped table-condensed table-bordered historyTable history">
+				<thead>
+					<tr>
+						<th>Symbol</th>
+						<th>Shares</th>
+						<th>Cost</th>
+						<th>Gain %</th>
+						<th>Gain</th>
+						<th>Current</th>
+						<th>Prev</th>
+						<th>Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="buy in buys">
+						<td>{{buy.symbol}}</td>
+						<td>{{buy.shares}}</td>
+						<td>{{buy.price}}</td>
+						<td>{{buy.gainPct}}</td>
+						<td>{{buy.gain}}</td>
+						<td>{{buy.currentQuote}}</td>
+						<td>{{buy.prevClose}}</td>
+						<td>Date</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+		<h3>Sell History</h3>
+		<div ng-controller="SellHistoryCtrl">
+
+			<table class="table table-hover table-striped table-condensed table-bordered historyTable history">
+				<thead>
+					<tr>
+						<th>Symbol</th>
+						<th>Shares</th>
+						<th>Gain %</th>
+						<th>Gain</th>
+						<th>Cost</th>
+						<th>SoldAt</th>
+						<th>Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="sell in sells">
+						<td>{{sell.symbol}}</td>
+						<td>{{sell.shares}}</td>
+						<td>{{sell.gainPct}}</td>
+						<td>{{sell.gain}}</td>
+						<td>{{sell.costPerShare}}</td>
+						<td>{{sell.price}}</td>
+						<td>Date</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</div>

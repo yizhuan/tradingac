@@ -1,13 +1,13 @@
 package mobi.qubits.tradingac.quote.google;
 
-import mobi.qubits.tradingac.quote.Quote;
+import mobi.qubits.tradingac.quote.Ticker;
 
 /**
  * 
  * @author yizhuan
  *
  */
-public class GoogleQuote extends Quote{
+public class GoogleQuote extends Ticker{
 	
 	
 	
