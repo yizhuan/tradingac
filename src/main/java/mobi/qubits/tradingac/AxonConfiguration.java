@@ -1,6 +1,7 @@
 package mobi.qubits.tradingac;
 
 import java.util.Arrays;
+import java.util.concurrent.Executor;
 
 import mobi.qubits.tradingac.domain.trader.Trader;
 
@@ -15,12 +16,18 @@ import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.SimpleEventBus;
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerBeanPostProcessor;
 import org.axonframework.eventsourcing.EventSourcingRepository;
+import org.axonframework.eventsourcing.Snapshotter;
+import org.axonframework.eventsourcing.SpringAggregateSnapshotter;
+import org.axonframework.eventstore.EventStore;
+import org.axonframework.eventstore.SnapshotEventStore;
 import org.axonframework.eventstore.mongo.DefaultMongoTemplate;
 import org.axonframework.eventstore.mongo.MongoEventStore;
+import org.axonframework.serializer.bson.DBObjectXStreamSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.mongodb.Mongo;
 
@@ -70,6 +77,41 @@ public class AxonConfiguration {
 		return factory;
 	}
 	
+	
+	@Bean
+	public SnapshotEventStore snapshotEventStore() {
+		return mongoEventStore();
+	}
 
+	@Bean
+	public EventStore eventStore() {
+		return mongoEventStore();
+	}
+	
+	@Bean
+	public MongoEventStore mongoEventStore() {
+		DefaultMongoTemplate template = new DefaultMongoTemplate(mongo, "axonframework", "domainevents", "snapshotevents", null,
+				null);
+		MongoEventStore store = new MongoEventStore(new DBObjectXStreamSerializer(), template);
+		return store;
+	}
+	
+	
+	@Bean
+	public Executor taskExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(2);
+		executor.setMaxPoolSize(5);
+		executor.setWaitForTasksToCompleteOnShutdown(true);
+		return executor;
+	}
+
+	@Bean
+	public Snapshotter snapshotter() {
+		SpringAggregateSnapshotter snapshotter = new SpringAggregateSnapshotter();
+		snapshotter.setExecutor(taskExecutor());
+		snapshotter.setEventStore(snapshotEventStore());
+		return snapshotter;
+	}	
 
 }

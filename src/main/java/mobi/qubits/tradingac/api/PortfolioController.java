@@ -78,6 +78,7 @@ public class PortfolioController /*extends QuoteProvider*/{
 		
 		Float assetCurrentValue = 0.0f;
 		Float assetGain = 0.0f; 
+		Float assetCost = 0.0f;
 		
 		List<Asset> assets = new ArrayList<Asset>();
 		
@@ -97,6 +98,7 @@ public class PortfolioController /*extends QuoteProvider*/{
 			
 			assetCurrentValue += currentValue;
 			assetGain += gain;
+			assetCost += costValue;
 			
 			Asset asset = new Asset();
 			asset.setCost(costPrice);
@@ -115,6 +117,7 @@ public class PortfolioController /*extends QuoteProvider*/{
 		PortfolioSummary summary = new PortfolioSummary();
 		summary.setCurrentValue(trader.getInvestment()+assetGain);
 		summary.setAssetValue(assetCurrentValue);
+		summary.setAssetCost(assetCost);
 		summary.setInvestment(trader.getInvestment());
 		
 		Float sgain = assetGain;

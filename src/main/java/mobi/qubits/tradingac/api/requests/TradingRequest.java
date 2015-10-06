@@ -12,6 +12,8 @@ public class TradingRequest {
 	
 	private Float price;
 	
+	private Float costPerShare;
+	
 	private Short type;
 	
 	public TradingRequest(){
@@ -19,14 +21,22 @@ public class TradingRequest {
 	}
 	
 	public TradingRequest(String symbol, Long shares, Float price, Short type) {
+		this(symbol, shares, price,type, null);		
+	}
+	
+	public TradingRequest(String symbol, Long shares, Float price, Short type, Float costPerShare) {
 		super();
 		this.symbol = symbol;
 		this.shares = shares;
 		
 		this.price = price;
+		
+		this.costPerShare = costPerShare;
+		
 		this.type = type;
 		
 	}
+	
 	public String getSymbol() {
 		return symbol;
 	}
@@ -54,6 +64,14 @@ public class TradingRequest {
 
 	public void setType(Short type) {
 		this.type = type;
+	}
+
+	public Float getCostPerShare() {
+		return costPerShare;
+	}
+
+	public void setCostPerShare(Float costPerShare) {
+		this.costPerShare = costPerShare;
 	}
 
 	

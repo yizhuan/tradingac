@@ -1,19 +1,15 @@
 body {
-    padding: 25px;
+    padding: 5px;
 }
 
-.view {
-    left: 60px;
-    position: relative;
-    opacity: 0.0;
-}
 
 .card {
     background-color:#efefef;
     border: 1px solid black;
     height:175px;
     width: 225px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .cardHeader {

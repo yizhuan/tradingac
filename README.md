@@ -1,16 +1,4 @@
-# tradingac
-
-Rules: 
-	You can only sell existing shares.
-	
-Seq:
-
-1. load account overview
-	
-
-	
-	
-
+# tradingapp
 
 This application uses:
 
@@ -21,6 +9,8 @@ This application uses:
 - Axon Framework
 - RESTful service
 - MongoDB
+- AngularJs
+- Bootstrap
 
 # Build
 
@@ -101,9 +91,10 @@ This version is just a rough sketch. Still lots to do:
 - Add an interface to connect to real trading system
 - Add tests, cover basic tests yet.
 - Add Javadocs
-- Add a web UI
+- Add REST API docs
+- Improve web UI
 - Fix TODOs
-
+- Clean-up the code
 
 
 

@@ -102,7 +102,7 @@ public class TradesTest {
 		TradingRequest sreq = new TradingRequest(symbol1, 100L, price, (short)0);
 		
 		cmdGateway.send(new SellCommand(id, sreq.getSymbol(), sreq
-				.getShares(), sreq.getPrice()));
+				.getShares(), sreq.getPrice(), 17.0f));
 		
 		Thread.sleep(1000);
 					

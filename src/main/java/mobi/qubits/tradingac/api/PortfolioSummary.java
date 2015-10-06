@@ -4,6 +4,7 @@ public class PortfolioSummary {
 	private Float investment;
 	private Float currentValue;
 	private Float assetValue;
+	private Float assetCost; 
 	private Float gainPct;
 	private Float gain;
 	
@@ -37,6 +38,14 @@ public class PortfolioSummary {
 	public void setAssetValue(Float assetValue) {
 		this.assetValue = assetValue;
 	}
+	public Float getAssetCost() {
+		return assetCost;
+	}
+	public void setAssetCost(Float assetCost) {
+		this.assetCost = assetCost;
+	}
+	
+	
 	
 	
 	

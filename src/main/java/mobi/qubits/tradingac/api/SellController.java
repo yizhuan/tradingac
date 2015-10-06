@@ -52,7 +52,8 @@ public class SellController{
 	public void sell1(@RequestBody @Valid TradingRequest request, @PathVariable String id) {		
 		AssetEntity a = assetRepo.findByTraderIdAndSymbol(id,  request.getSymbol());		
 		cmdGateway.send(new SellCommand(id, request.getSymbol(), request
-				.getShares(), request.getPrice(), a.getCostPerShare()));		
+				.getShares(), request.getPrice(), 
+				request.getCostPerShare()==null?a.getCostPerShare() : request.getCostPerShare()));		
 	}	
 	
 	@RequestMapping(value = "/api/traders/{id}/trades/{tradeId}/sell", method = RequestMethod.POST)

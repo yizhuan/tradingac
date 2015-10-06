@@ -3,9 +3,11 @@ package mobi.qubits.tradingac.domain.trader;
 import java.util.List;
 
 import mobi.qubits.tradingac.domain.trader.commands.BuyCommand;
+import mobi.qubits.tradingac.domain.trader.commands.BuyShareCommand;
 import mobi.qubits.tradingac.domain.trader.commands.RegisterNewTraderCommand;
 import mobi.qubits.tradingac.domain.trader.commands.SellCommand;
 import mobi.qubits.tradingac.domain.trader.events.BuyEvent;
+import mobi.qubits.tradingac.domain.trader.events.BuyShareEvent;
 import mobi.qubits.tradingac.domain.trader.events.RegisterNewTraderEvent;
 import mobi.qubits.tradingac.domain.trader.events.SellEvent;
 
@@ -35,11 +37,15 @@ public class Trader extends AbstractAnnotatedAggregateRoot<String>{
 		apply(new RegisterNewTraderEvent(cmd.getId(), cmd.getName(), cmd.getInvestment()));
 	}	
 	
+	@CommandHandler
+	public void on(BuyShareCommand cmd) {	
+		apply(new BuyShareEvent(cmd.getId(), cmd.getSymbol(), cmd.getShares(), cmd.getPrice()));
+	}	
 	
 	@CommandHandler
 	public void on(BuyCommand cmd) {	
 		apply(new BuyEvent(cmd.getId(), cmd.getSymbol(), cmd.getShares(), cmd.getPrice()));
-	}
+	}	
 
 	@CommandHandler
 	public void on(SellCommand cmd) {	
@@ -52,13 +58,15 @@ public class Trader extends AbstractAnnotatedAggregateRoot<String>{
 		this.id = event.getId();
 	}
 	
+	@EventSourcingHandler
+	void on(BuyShareEvent event) {
+				
+	}
 	
 	@EventSourcingHandler
 	void on(BuyEvent event) {
 				
-	}
-			
-	
+	}			
 	
 	@EventSourcingHandler
 	void on(SellEvent event) {
