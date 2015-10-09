@@ -46,6 +46,10 @@
         </dependency>
          -->
         
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+		</dependency>        
         
         <!-- tag::tests[] -->
         <dependency>
