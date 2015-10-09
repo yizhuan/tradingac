@@ -5,7 +5,7 @@ package mobi.qubits.tradingapp.api.requests;
  * @author yizhuan
  *
  */
-public class TradingRequest {
+public class SellRequest {
 
 	private String symbol;	
 	private Long shares;
@@ -13,28 +13,18 @@ public class TradingRequest {
 	private Float price;
 	
 	private Float costPerShare;
-	
-	private Short type;
-	
-	public TradingRequest(){
+
+	public SellRequest(){
 		
 	}
 	
-	public TradingRequest(String symbol, Long shares, Float price, Short type) {
-		this(symbol, shares, price,type, null);		
-	}
 	
-	public TradingRequest(String symbol, Long shares, Float price, Short type, Float costPerShare) {
+	public SellRequest(String symbol, Long shares, Float price, Float costPerShare) {
 		super();
 		this.symbol = symbol;
-		this.shares = shares;
-		
-		this.price = price;
-		
-		this.costPerShare = costPerShare;
-		
-		this.type = type;
-		
+		this.shares = shares;		
+		this.price = price;		
+		this.costPerShare = costPerShare;		
 	}
 	
 	public String getSymbol() {
@@ -56,14 +46,6 @@ public class TradingRequest {
 
 	public void setPrice(Float price) {
 		this.price = price;
-	}
-
-	public Short getType() {
-		return type;
-	}
-
-	public void setType(Short type) {
-		this.type = type;
 	}
 
 	public Float getCostPerShare() {

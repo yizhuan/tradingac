@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import mobi.qubits.tradingapp.api.requests.TradingRequest;
+import mobi.qubits.tradingapp.api.requests.SellRequest;
 import mobi.qubits.tradingapp.domain.trader.commands.SellCommand;
 import mobi.qubits.tradingapp.query.trade.AssetEntity;
 import mobi.qubits.tradingapp.query.trade.AssetEntityRepository;
@@ -49,7 +49,7 @@ public class SellController{
 	
 	@RequestMapping(value = "/api/traders/{id}/sell", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
-	public void sell1(@RequestBody @Valid TradingRequest request, @PathVariable String id) {		
+	public void sell1(@RequestBody @Valid SellRequest request, @PathVariable String id) {		
 		AssetEntity a = assetRepo.findByTraderIdAndSymbol(id,  request.getSymbol());		
 		cmdGateway.send(new SellCommand(id, request.getSymbol(), request
 				.getShares(), request.getPrice(), 
@@ -58,7 +58,7 @@ public class SellController{
 	
 	@RequestMapping(value = "/api/traders/{id}/trades/{tradeId}/sell", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
-	public void sell2(@RequestBody @Valid TradingRequest request, @PathVariable String id,  @PathVariable String tradeId) {
+	public void sell2(@RequestBody @Valid SellRequest request, @PathVariable String id,  @PathVariable String tradeId) {
 				
 		TradeEntity buyEntry = tradeEntryRepository.findOne( tradeId );
 		

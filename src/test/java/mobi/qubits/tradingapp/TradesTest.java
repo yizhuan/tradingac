@@ -3,7 +3,7 @@ package mobi.qubits.tradingapp;
 import static org.junit.Assert.assertTrue;
 import mobi.qubits.tradingapp.Application;
 import mobi.qubits.tradingapp.api.requests.TraderRequest;
-import mobi.qubits.tradingapp.api.requests.TradingRequest;
+import mobi.qubits.tradingapp.api.requests.SellRequest;
 import mobi.qubits.tradingapp.domain.stock.commands.CreateStockCommand;
 import mobi.qubits.tradingapp.domain.stock.commands.UpdateQuoteCommand;
 import mobi.qubits.tradingapp.domain.trader.commands.BuyCommand;
@@ -79,7 +79,7 @@ public class TradesTest {
 	@Test
 	public void testBuying() throws InterruptedException{
 		
-		TradingRequest req = new TradingRequest(symbol1, 100L,17.0F, (short)1);
+		SellRequest req = new SellRequest(symbol1, 100L,17.0F, 18.9f);
 		
 		cmdGateway.send(new BuyCommand(id, req.getSymbol(), req
 				.getShares(), req.getPrice()));
@@ -95,12 +95,12 @@ public class TradesTest {
 		Long shares = ac==null? 0L: ac.getShares();
 		
 		
-		TradingRequest breq = new TradingRequest(symbol1, 100L, price, (short)1);
+		SellRequest breq = new SellRequest(symbol1, 100L, price, 12.09f);
 		
 		cmdGateway.send(new BuyCommand(id, breq.getSymbol(), breq
 				.getShares(), breq.getPrice()));		
 				
-		TradingRequest sreq = new TradingRequest(symbol1, 100L, price, (short)0);
+		SellRequest sreq = new SellRequest(symbol1, 100L, price, 15.9f);
 		
 		cmdGateway.send(new SellCommand(id, sreq.getSymbol(), sreq
 				.getShares(), sreq.getPrice(), 17.0f));

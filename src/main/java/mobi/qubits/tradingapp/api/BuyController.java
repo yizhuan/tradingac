@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import mobi.qubits.tradingapp.api.requests.TradingRequest;
+import mobi.qubits.tradingapp.api.requests.BuyRequest;
 import mobi.qubits.tradingapp.domain.trader.commands.BuyShareCommand;
 import mobi.qubits.tradingapp.query.trade.AssetEntityRepository;
 import mobi.qubits.tradingapp.query.trade.QuoteEntity;
@@ -49,10 +49,7 @@ public class BuyController{
 	
 	@RequestMapping(value = "/api/traders/{id}/buy", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
-	public void buy(@RequestBody @Valid TradingRequest request, @PathVariable String id) {
-		//cmdGateway.send(new BuyCommand(id, request.getSymbol(), request
-		//		.getShares(), request.getPrice()));
-		
+	public void buy(@RequestBody @Valid BuyRequest request, @PathVariable String id) {			
 		cmdGateway.send(new BuyShareCommand(id, request.getSymbol(), request
 				.getShares(), request.getPrice()));
 		
