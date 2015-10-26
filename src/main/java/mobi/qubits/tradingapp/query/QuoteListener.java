@@ -1,4 +1,4 @@
-package mobi.qubits.tradingapp.query.trade;
+package mobi.qubits.tradingapp.query;
 
 import mobi.qubits.tradingapp.domain.stock.events.QuoteUpdatedEvent;
 import mobi.qubits.tradingapp.domain.stock.events.StockCreatedEvent;
@@ -10,28 +10,29 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QuoteListener {
-	
-	
+
+
 	@Autowired
 	private QuoteEntityRepository repo;
 
- 
+
 	@EventHandler
 	void on(StockCreatedEvent event) {
 
 		QuoteEntity entry = new QuoteEntity();
+		entry.setId(event.getId());
 		entry.setSymbol(event.getSymbol());
 
 		repo.save(entry);
-	}	
-	
+	}
+
 
 	@EventHandler
 	void on(QuoteUpdatedEvent event) {
-		QuoteEntity entry = repo.findOne(event.getSymbol());
-		
+		QuoteEntity entry = repo.findBySymbol(event.getSymbol());
+
 		Ticker q = event.getTicker();
-		
+
 		entry.setCurrentQuote(q.getCurrentQuote());
 		entry.setDate(q.getDate());
 		entry.setHigh(q.getHigh());
@@ -42,9 +43,9 @@ public class QuoteListener {
 		entry.setQuoteTime(q.getQuoteTime());
 		entry.setSymbol(q.getSymbol());
 		entry.setTimestamp(q.getTimestamp());
-				
-		repo.save(entry);	
-		
-	}	
+
+		repo.save(entry);
+
+	}
 
 }

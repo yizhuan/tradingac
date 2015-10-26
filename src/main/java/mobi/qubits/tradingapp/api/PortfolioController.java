@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mobi.qubits.tradingapp.query.trade.AssetEntity;
-import mobi.qubits.tradingapp.query.trade.AssetEntityRepository;
-import mobi.qubits.tradingapp.query.trade.QuoteEntity;
-import mobi.qubits.tradingapp.query.trade.QuoteEntityRepository;
-import mobi.qubits.tradingapp.query.trade.TradeEntityRepository;
-import mobi.qubits.tradingapp.query.trade.TraderEntity;
-import mobi.qubits.tradingapp.query.trade.TraderEntityRepository;
-import mobi.qubits.tradingapp.quote.QuoteProvider;
+import mobi.qubits.tradingapp.query.AssetEntity;
+import mobi.qubits.tradingapp.query.AssetEntityRepository;
+import mobi.qubits.tradingapp.query.QuoteEntity;
+import mobi.qubits.tradingapp.query.QuoteEntityRepository;
+import mobi.qubits.tradingapp.query.TradeEntityRepository;
+import mobi.qubits.tradingapp.query.TraderEntity;
+import mobi.qubits.tradingapp.query.TraderEntityRepository;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.DefaultIdentifierFactory;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 
+ *
  * @author yizhuan
  *
  */
@@ -36,7 +35,7 @@ public class PortfolioController /*extends QuoteProvider*/{
 
 	@Autowired
 	private TraderEntityRepository traderEntryRepository;
-	
+
 	@Autowired
 	private TradeEntityRepository tradeEntryRepository;
 
@@ -44,97 +43,98 @@ public class PortfolioController /*extends QuoteProvider*/{
 	@Autowired
 	private AssetEntityRepository tradingBalanceRepository;
 
-	
+
 	@Autowired
 	private QuoteEntityRepository quoteRepo;
-	
-	
+
+
 	@Autowired
 	private AssetEntityRepository assetRepo;
-	
+
 
 	@Autowired
 	private CommandGateway cmdGateway;
-	
 
-	@RequestMapping(value = "/api/traders/{id}/portfolios", method = RequestMethod.GET)	
+
+	@RequestMapping(value = "/api/traders/{id}/portfolios", method = RequestMethod.GET)
 	public @ResponseBody Portfolio portfolios(@PathVariable String id) {
-		
+
 		TraderEntity trader = traderEntryRepository.findOne(id);
-		
+
 		List<AssetEntity> assetEntities = assetRepo.findByTraderId(id);
 		List<String> symbols = new ArrayList<String>();
 		for (AssetEntity e : assetEntities){
 			symbols.add(e.getSymbol());
 		}
-		
+
 		Map<String, QuoteEntity> quotes = new HashMap<String, QuoteEntity>();
 		for (String sym : symbols){
-			QuoteEntity e = quoteRepo.findOne(sym);
+			QuoteEntity e = quoteRepo.findBySymbol(sym);
 			if (e!=null)
 				quotes.put(sym, e);
 		}
-					
-		
+
+
 		Float assetCurrentValue = 0.0f;
-		Float assetGain = 0.0f; 
+		Float assetGain = 0.0f;
 		Float assetCost = 0.0f;
-		
+
 		List<Asset> assets = new ArrayList<Asset>();
-		
+
 		for (AssetEntity e : assetEntities){
-			
+
 			String symbol = e.getSymbol();
 			QuoteEntity quote = quotes.get(symbol);
 			Float price = quote.getCurrentQuote();
 			Float costPrice = e.getCostPerShare();
 			Long shares = e.getShares();
-			
+
 			Float currentValue = shares * price;
 			Float costValue = shares * costPrice;
-			
+
 			Float gain = currentValue - costValue;
 			Float gainPct = 100.0f * (gain / costValue);
-			
+
 			assetCurrentValue += currentValue;
 			assetGain += gain;
 			assetCost += costValue;
-			
+
 			Asset asset = new Asset();
 			asset.setCost(costPrice);
 			asset.setCurrentPrice(price);
 			asset.setCurrentValue(currentValue);
-			
+
 			asset.setGain(gain);
 			asset.setGainPct(gainPct);
-			
+
 			asset.setShares(shares);
 			asset.setSymbol(symbol);
-						
-			assets.add(asset);			
+			asset.setName(quote.getName());
+
+			assets.add(asset);
 		}
-		
+
 		PortfolioSummary summary = new PortfolioSummary();
 		summary.setCurrentValue(trader.getInvestment()+assetGain);
 		summary.setAssetValue(assetCurrentValue);
 		summary.setAssetCost(assetCost);
 		summary.setInvestment(trader.getInvestment());
-		
+
 		Float sgain = assetGain;
 		Float sgainPct = 100.0f * (sgain / trader.getInvestment());
-		
+
 		summary.setGain(sgain);
-		summary.setGainPct(sgainPct);		
-		
+		summary.setGainPct(sgainPct);
+
 		Portfolio portfolio = new Portfolio();
-		
+
 		portfolio.setTraderId(id);
-		
+
 		portfolio.setAssets(assets);
 		portfolio.setSummary(summary);
-		
-		return portfolio;		
+
+		return portfolio;
 	}
-	
-	
+
+
 }

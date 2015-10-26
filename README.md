@@ -1,6 +1,6 @@
 # tradingapp
 
-This application uses:
+This application is an exercise of the following technologies:
 
 - Domain Driven Design
 - CQRS
@@ -11,10 +11,11 @@ This application uses:
 - MongoDB
 - AngularJs
 - Bootstrap
+- Single Page Application
 
 # Build
 
-$ mvn package
+$ mvn clean package
 
 # Start service
 
@@ -88,11 +89,11 @@ tradeEntry
 
 This version is just a rough sketch. Still lots to do:
 
-- Add an interface to connect to real trading system
 - Add tests, cover basic tests yet.
 - Add Javadocs
 - Add REST API docs
 - Improve web UI
+- Add authentication and authorization
 - Fix TODOs
 - Clean-up the code
 

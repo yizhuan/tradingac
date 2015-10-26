@@ -17,19 +17,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * 
+ *
  * @author yizhuan
  *
  */
 @Configuration
 @Import(AxonConfiguration.class)
-public class SagaConfiguration extends AxonConfiguration{	
-	
-	@Bean 
+public class SagaConfiguration extends AxonConfiguration{
+
+	@Bean
 	public ResourceInjector resourceInjector() {
 		return new SpringResourceInjector();
 	}
-	
+
 	@Bean
 	public SagaFactory sagaFactory() {
 		GenericSagaFactory factory = new GenericSagaFactory();
@@ -39,12 +39,12 @@ public class SagaConfiguration extends AxonConfiguration{
 
 	@Bean
 	public SagaRepository sagaRepository() {
-		MongoTemplate template = new DefaultMongoTemplate(mongo, "axonframework", "sagas", null, null);
+		MongoTemplate template = new DefaultMongoTemplate(mongo, eventStoreDbName, "sagas", null, null);
 		MongoSagaRepository rep = new MongoSagaRepository(template);
 		rep.setResourceInjector(resourceInjector());
 		return rep;
 	}
-	
+
 	@Bean
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public SagaManager sagaManager() {

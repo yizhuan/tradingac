@@ -7,11 +7,11 @@ import javax.validation.Valid;
 import mobi.qubits.tradingapp.api.requests.TraderRequest;
 import mobi.qubits.tradingapp.domain.trader.commands.ModifyTraderInfoCommand;
 import mobi.qubits.tradingapp.domain.trader.commands.RegisterNewTraderCommand;
-import mobi.qubits.tradingapp.query.trade.AssetEntityRepository;
-import mobi.qubits.tradingapp.query.trade.TradeEntity;
-import mobi.qubits.tradingapp.query.trade.TradeEntityRepository;
-import mobi.qubits.tradingapp.query.trade.TraderEntity;
-import mobi.qubits.tradingapp.query.trade.TraderEntityRepository;
+import mobi.qubits.tradingapp.query.AssetEntityRepository;
+import mobi.qubits.tradingapp.query.TradeEntity;
+import mobi.qubits.tradingapp.query.TradeEntityRepository;
+import mobi.qubits.tradingapp.query.TraderEntity;
+import mobi.qubits.tradingapp.query.TraderEntityRepository;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.domain.DefaultIdentifierFactory;

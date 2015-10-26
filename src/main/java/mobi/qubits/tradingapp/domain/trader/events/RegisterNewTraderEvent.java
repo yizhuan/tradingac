@@ -1,16 +1,18 @@
 package mobi.qubits.tradingapp.domain.trader.events;
 
+import java.io.Serializable;
+
 /**
- * 
+ *
  * @author yizhuan
  *
  */
-public class RegisterNewTraderEvent {
+public class RegisterNewTraderEvent implements Serializable{
 
 	private String id;
-	
+
 	private String name;
-	
+
 	private Float investment;
 
 	public RegisterNewTraderEvent(String id, String name,  Float investment) {
@@ -33,5 +35,5 @@ public class RegisterNewTraderEvent {
 	}
 
 
-	
+
 }

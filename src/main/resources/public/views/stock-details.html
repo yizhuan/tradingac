@@ -8,31 +8,31 @@
 		<h3>Buy History</h3>
 
 		<div ng-controller="BuyHistoryCtrl">
-			
+
 			<div class="span4">
-	
+
 				<input type="text" id="field_id_symbol" ng-model="sell.symbol"
 					placeholder="Symbol"></input>
-					 
+
 				<input type="text"
 					id="field_id_shares" ng-model="sell.shares"
-					placeholder="Num of Shares"> </input>					 
-					
+					placeholder="Num of Shares"> </input>
+
 				<input type="text"
 					id="field_id_cost" ng-model="sell.costPerShare"
-					placeholder="Cost per Share"></input>				
+					placeholder="Cost per Share"></input>
 
 				<input type="text"
 					id="field_id_price" ng-model="sell.price"
 					placeholder="Selling Price"></input>
 
-	
-				<button id="submitSell" class="btn btn-sm" type="button" 
-	                    data-ng-disabled="!sell.symbol || !sell.shares || !sell.price || !sell.costPerShare" 
+
+				<button id="submitSell" class="btn btn-sm" type="button"
+	                    data-ng-disabled="!sell.symbol || !sell.shares || !sell.price || !sell.costPerShare"
 	                    data-ng-click="submit()">Sell Shares</button>
 			</div>
-	
-			<br />				
+
+			<br />
 
 			<table class="table table-hover table-striped table-condensed table-bordered historyTable history">
 				<thead>
@@ -49,7 +49,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="buy in buys" data-ng-click="onSelect(buy.symbol, buy.shares, buy.price)">
-						<td>{{buy.symbol}}</td>
+						<td>{{buy.name}} {{buy.symbol}}</td>
 						<td>{{buy.shares}}</td>
 						<td>{{buy.price}}</td>
 						<td>{{buy.gainPct}}</td>
@@ -80,7 +80,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="i in sells">
-						<td>{{i.symbol}}</td>
+						<td>{{i.name}} {{i.symbol}}</td>
 						<td>{{i.shares}}</td>
 						<td>{{i.gainPct}}</td>
 						<td>{{i.gain}}</td>

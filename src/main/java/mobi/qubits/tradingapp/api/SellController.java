@@ -6,12 +6,12 @@ import javax.validation.Valid;
 
 import mobi.qubits.tradingapp.api.requests.SellRequest;
 import mobi.qubits.tradingapp.domain.trader.commands.SellCommand;
-import mobi.qubits.tradingapp.query.trade.AssetEntity;
-import mobi.qubits.tradingapp.query.trade.AssetEntityRepository;
-import mobi.qubits.tradingapp.query.trade.SellEntity;
-import mobi.qubits.tradingapp.query.trade.SellEntityRepository;
-import mobi.qubits.tradingapp.query.trade.TradeEntity;
-import mobi.qubits.tradingapp.query.trade.TradeEntityRepository;
+import mobi.qubits.tradingapp.query.AssetEntity;
+import mobi.qubits.tradingapp.query.AssetEntityRepository;
+import mobi.qubits.tradingapp.query.SellEntity;
+import mobi.qubits.tradingapp.query.SellEntityRepository;
+import mobi.qubits.tradingapp.query.TradeEntity;
+import mobi.qubits.tradingapp.query.TradeEntityRepository;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;

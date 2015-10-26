@@ -1,4 +1,4 @@
-package mobi.qubits.tradingapp.query.trade;
+package mobi.qubits.tradingapp.query;
 
 import mobi.qubits.tradingapp.domain.trader.events.BuyEvent;
 import mobi.qubits.tradingapp.domain.trader.events.ModifyTraderInfoEvent;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 
+ *
  * @author yizhuan
  *
  */
@@ -21,14 +21,14 @@ public class TraderListener {
 	private TraderEntityRepository traderEntryRepository;
 
 	@Autowired
-	private AssetEntityRepository tradingAccountRepository;
+	private AssetEntityRepository assetRepo;
 
 	@EventHandler
 	void on(RegisterNewTraderEvent event) {
 		TraderEntity entry = new TraderEntity(event.getId(), event.getName(), event.getInvestment());
 		traderEntryRepository.save(entry);
 	}
-		
+
 	@EventHandler
 	void on(ModifyTraderInfoEvent event) {
 		TraderEntity entry = traderEntryRepository.findOne(event.getId());
@@ -36,11 +36,11 @@ public class TraderListener {
 		entry.setInvestment(event.getInvestment());
 		traderEntryRepository.save(entry);
 	}
-	
+
 	@EventHandler
 	void on(BuyEvent event) {
 
-		AssetEntity acc = tradingAccountRepository.findByTraderIdAndSymbol(
+		AssetEntity acc = assetRepo.findByTraderIdAndSymbol(
 				event.getId(), event.getSymbol());
 
 		if (acc == null) {
@@ -52,7 +52,7 @@ public class TraderListener {
 			acc1.setShares(event.getShares());
 			acc1.setCostPerShare(event.getPrice());
 
-			tradingAccountRepository.save(acc1);
+			assetRepo.save(acc1);
 		} else {
 			Long existingShares = acc.getShares();
 			Long newShares = event.getShares();
@@ -68,7 +68,7 @@ public class TraderListener {
 
 			acc.setCostPerShare(newCostPerShare);
 
-			tradingAccountRepository.save(acc);
+			assetRepo.save(acc);
 		}
 
 	}
@@ -76,13 +76,13 @@ public class TraderListener {
 	@EventHandler
 	void on(SellEvent event) {
 
-		AssetEntity acc = tradingAccountRepository.findByTraderIdAndSymbol(
+		AssetEntity acc = assetRepo.findByTraderIdAndSymbol(
 				event.getId(), event.getSymbol());
 
 		if (acc == null) {
 			AssetEntity acc1 = new AssetEntity();
-			
-			acc1.setTraderId(event.getId());			
+
+			acc1.setTraderId(event.getId());
 			acc1.setSymbol(event.getSymbol());
 			acc1.setShares(0L - event.getShares());
 			acc1.setCostPerShare(event.getPrice());
@@ -94,7 +94,7 @@ public class TraderListener {
 
 			acc.setShares(totalShares);
 
-			tradingAccountRepository.save(acc);
+			assetRepo.save(acc);
 		}
 
 	}

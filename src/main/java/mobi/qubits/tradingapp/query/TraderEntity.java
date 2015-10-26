@@ -1,4 +1,4 @@
-package mobi.qubits.tradingapp.query.trade;
+package mobi.qubits.tradingapp.query;
 
 import org.springframework.data.annotation.Id;
 

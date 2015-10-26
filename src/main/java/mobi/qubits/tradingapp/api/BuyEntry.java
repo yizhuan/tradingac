@@ -1,40 +1,42 @@
 package mobi.qubits.tradingapp.api;
 
-import mobi.qubits.tradingapp.query.trade.QuoteEntity;
-import mobi.qubits.tradingapp.query.trade.TradeEntity;
+import mobi.qubits.tradingapp.query.QuoteEntity;
+import mobi.qubits.tradingapp.query.TradeEntity;
 
 /**
- * 
+ *
  * @author yizhuan
  *
  */
 public class BuyEntry {
-	
+
 	private String tradeId;
-	
+
 	private String symbol;
+	private String name;
 	private Long shares;
 	private Float price;
 
 	private Float gain;
 	private Float gainPct;
-	
+
 	private Float currentQuote;
 	private Float prevClose;
-		
+
 	public BuyEntry(TradeEntity entry, QuoteEntity quote){
 		this.tradeId = entry.getId();
 		this.symbol = entry.getSymbol();
+		this.name = quote.getName();
 		this.shares = entry.getShares();
 		this.price = entry.getPrice();
 		this.currentQuote = quote.getCurrentQuote();
 		this.prevClose = quote.getPrevClose();
-		
-		this.gain = shares * (price - currentQuote);
-		this.gainPct =  100.0f * (gain / (shares * price) );	
+
+		this.gain = shares * (currentQuote - price);
+		this.gainPct =  100.0f * (gain / (shares * price) );
 	}
 
-	
+
 	public String getTradeId() {
 		return tradeId;
 	}
@@ -49,6 +51,14 @@ public class BuyEntry {
 
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getShares() {
@@ -98,5 +108,5 @@ public class BuyEntry {
 	public void setPrevClose(Float prevClose) {
 		this.prevClose = prevClose;
 	}
-	
+
 }

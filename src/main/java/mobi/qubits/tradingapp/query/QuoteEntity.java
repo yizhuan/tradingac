@@ -1,4 +1,4 @@
-package mobi.qubits.tradingapp.query.trade;
+package mobi.qubits.tradingapp.query;
 
 import java.util.Date;
 
@@ -7,22 +7,33 @@ import org.springframework.data.annotation.Id;
 public class QuoteEntity {
 
 	@Id
+	private String id;
+
 	private String symbol;
-	
+
 	private String name;
 	private float open;
 	private float prevClose;
 	private float currentQuote;
 	private float high;
 	private float low;
-	
+
 	private String date;
-	private String quoteTime;	
-	
+	private String quoteTime;
+
 	private Date timestamp;
 
 	public QuoteEntity() {
 		super();
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getSymbol() {
@@ -104,9 +115,9 @@ public class QuoteEntity {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

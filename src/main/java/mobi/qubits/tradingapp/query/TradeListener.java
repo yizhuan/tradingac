@@ -1,4 +1,4 @@
-package mobi.qubits.tradingapp.query.trade;
+package mobi.qubits.tradingapp.query;
 
 import mobi.qubits.tradingapp.domain.trader.events.BuyEvent;
 import mobi.qubits.tradingapp.domain.trader.events.SellEvent;

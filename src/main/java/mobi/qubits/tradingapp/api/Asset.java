@@ -3,21 +3,29 @@ package mobi.qubits.tradingapp.api;
 public class Asset {
 
 	private String symbol;
+	private String name;
+
 	private Long shares;
-		
+
 	private Float cost;//the price when the asset was bought
 	private Float currentPrice;
-	
+
 	private Float currentValue;
 	private Float gainPct;
 	private Float gain;
-	
-	
+
+
 	public String getSymbol() {
 		return symbol;
 	}
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public Long getShares() {
 		return shares;
@@ -55,7 +63,7 @@ public class Asset {
 	public void setGain(Float gain) {
 		this.gain = gain;
 	}
-	
-	
-	
+
+
+
 }
